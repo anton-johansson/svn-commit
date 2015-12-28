@@ -12,6 +12,8 @@ import com.antonjohansson.svncommit.domain.SvnItem;
  */
 public final class Converter
 {
+	private static final Pattern PATTERN = Pattern.compile("^(M|A|\\?)\\s*(.*)$");
+
 	private Converter() {}
 
 	/**
@@ -22,8 +24,7 @@ public final class Converter
 	 */
 	public static SvnItem convertFile(String statusLine)
 	{
-		Pattern pattern = Pattern.compile("^(M|A|\\?)\\s*(.*)$");
-		Matcher matcher = pattern.matcher(statusLine);
+		Matcher matcher = PATTERN.matcher(statusLine);
 
 		if (!matcher.matches())
 		{

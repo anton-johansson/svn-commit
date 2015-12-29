@@ -1,5 +1,7 @@
 package com.antonjohansson.svncommit.ui;
 
+import java.util.function.Consumer;
+
 import com.antonjohansson.svncommit.domain.DbUpdateLocation;
 import com.antonjohansson.svncommit.domain.FileStatus;
 import com.antonjohansson.svncommit.domain.SvnItem;
@@ -31,9 +33,18 @@ public class SvnItemTable extends TableView<SvnItem>
 	/** The offset, to avoid a scroll bar. */
 	private static final int OFFSET = 2;
 
+	private Consumer<SvnItem> doubleClickHandler;
+
 	public SvnItemTable()
 	{
 		setEditable(true);
+		setOnMouseClicked(e ->
+		{
+			if (e.getClickCount() == 2)
+			{
+				doubleClickHandler.accept(getSelectionModel().getSelectedItem());
+			}
+		});
 
 		TableColumn<SvnItem, Boolean> doCommit = new TableColumn<>("");
 		doCommit.setCellValueFactory(p -> p.getValue().doCommitProperty());
@@ -69,6 +80,11 @@ public class SvnItemTable extends TableView<SvnItem>
 		replication.setCellFactory(ComboBoxTableCell.forTableColumn(new ReplicationStringConverter(), DbUpdateLocation.values()));
 		replication.setPrefWidth(REPLICATION_WIDTH);
 		getColumns().add(replication);
+	}
+
+	public void setRowDoubleClickHandler(Consumer<SvnItem> doubleClickHandler)
+	{
+		this.doubleClickHandler = doubleClickHandler;
 	}
 
 	/**

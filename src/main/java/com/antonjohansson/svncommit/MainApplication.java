@@ -2,6 +2,7 @@ package com.antonjohansson.svncommit;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -33,8 +34,10 @@ public class MainApplication extends Application
 		{
 			return;
 		}
+		File directory = new File(path.get());
 
 		table = new SvnItemTable();
+		table.setRowDoubleClickHandler(i -> SVN.compare(directory, i.getFileName()));
 
 		StackPane root = new StackPane();
 		root.getChildren().add(table);
@@ -46,7 +49,7 @@ public class MainApplication extends Application
 
 		runLater(() ->
 		{
-			Collection<SvnItem> modifiedItems = SVN.getModifiedItems(path.get());
+			Collection<SvnItem> modifiedItems = SVN.getModifiedItems(directory);
 			ObservableList<SvnItem> items = observableArrayList(modifiedItems);
 			table.setItems(items);
 		});

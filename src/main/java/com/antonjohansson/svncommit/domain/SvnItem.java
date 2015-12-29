@@ -1,5 +1,7 @@
 package com.antonjohansson.svncommit.domain;
 
+import static com.antonjohansson.svncommit.domain.DbUpdateLocation.NONE;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -14,16 +16,16 @@ import javafx.beans.property.StringProperty;
  */
 public class SvnItem
 {
-	private final BooleanProperty doCommit = new SimpleBooleanProperty(this, "doCommit", false);
+	private final BooleanProperty doCommit = new SimpleBooleanProperty(this, "doCommit");
+	private final Property<FileStatus> status = new SimpleObjectProperty<>(this, "status");
 	private final StringProperty fileName = new SimpleStringProperty(this, "fileName", "");
-	private final Property<DbUpdateLocation> replication = new SimpleObjectProperty<>(this, "replication", DbUpdateLocation.NONE);
+	private final Property<DbUpdateLocation> replication = new SimpleObjectProperty<>(this, "replication", NONE);
 
-	public SvnItem()
-	{}
-
-	public SvnItem(String fileName)
+	public SvnItem(String fileName, FileStatus status)
 	{
 		setFileName(fileName);
+		setStatus(status);
+		setDoCommit(status.isDoCommitByDefault());
 	}
 
 	public boolean isDoCommit()
@@ -34,6 +36,21 @@ public class SvnItem
 	public void setDoCommit(boolean doCommit)
 	{
 		this.doCommit.setValue(doCommit);
+	}
+
+	public BooleanProperty doCommitProperty()
+	{
+		return doCommit;
+	}
+
+	public FileStatus getStatus()
+	{
+		return this.status.getValue();
+	}
+
+	public void setStatus(FileStatus status)
+	{
+		this.status.setValue(status);
 	}
 
 	public String getFileName()

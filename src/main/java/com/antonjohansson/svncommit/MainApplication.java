@@ -39,7 +39,7 @@ public class MainApplication extends Application
 		StackPane root = new StackPane();
 		root.getChildren().add(table);
 		stage.setScene(new Scene(root));
-		stage.setWidth(600);
+		stage.setWidth(1200);
 		stage.setHeight(300);
 		stage.setTitle("SVN Commit");
 		stage.show();

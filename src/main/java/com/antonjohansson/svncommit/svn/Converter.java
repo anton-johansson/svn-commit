@@ -3,6 +3,7 @@ package com.antonjohansson.svncommit.svn;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.antonjohansson.svncommit.domain.FileStatus;
 import com.antonjohansson.svncommit.domain.SvnItem;
 
 /**
@@ -32,8 +33,14 @@ public final class Converter
 		}
 
 		String status = matcher.group(1);
-		String fileName = matcher.group(2);
+		if (status.length() != 1)
+		{
+			throw new RuntimeException("status must be one character");
+		}
 
-		return new SvnItem(fileName);
+		String fileName = matcher.group(2);
+		FileStatus fileStatus = FileStatus.getStatus(status.charAt(0));
+
+		return new SvnItem(fileName, fileStatus);
 	}
 }

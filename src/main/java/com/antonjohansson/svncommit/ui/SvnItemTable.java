@@ -1,8 +1,10 @@
 package com.antonjohansson.svncommit.ui;
 
 import com.antonjohansson.svncommit.domain.DbUpdateLocation;
+import com.antonjohansson.svncommit.domain.FileStatus;
 import com.antonjohansson.svncommit.domain.SvnItem;
 
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -20,6 +22,9 @@ public class SvnItemTable extends TableView<SvnItem>
 	/** The width of the commit check box column. */
 	private static final double DO_COMMIT_WIDTH = 40;
 
+	/** The width of the status column. */
+	private static final double STATUS_WIDTH = 100;
+
 	/** The width of the replication combo box column. */
 	private static final double REPLICATION_WIDTH = 160;
 
@@ -31,15 +36,32 @@ public class SvnItemTable extends TableView<SvnItem>
 		setEditable(true);
 
 		TableColumn<SvnItem, Boolean> doCommit = new TableColumn<>("");
-		doCommit.setCellValueFactory(new PropertyValueFactory<>("doCommit"));
+		doCommit.setCellValueFactory(p -> p.getValue().doCommitProperty());
 		doCommit.setCellFactory(CheckBoxTableCell.forTableColumn(doCommit));
 		doCommit.setPrefWidth(DO_COMMIT_WIDTH);
 		doCommit.setEditable(true);
 		getColumns().add(doCommit);
 
+		TableColumn<SvnItem, FileStatus> status = new TableColumn<>("Status");
+		status.setCellValueFactory(new PropertyValueFactory<>("status"));
+		status.setCellFactory(s ->
+		{
+			return new TableCell<SvnItem, FileStatus>()
+			{
+				@Override
+				protected void updateItem(FileStatus item, boolean empty)
+				{
+					super.updateItem(item, empty);
+					setText(empty ? "" : item.getCaption());
+				}
+			};
+		});
+		status.setPrefWidth(STATUS_WIDTH);
+		getColumns().add(status);
+
 		TableColumn<SvnItem, String> fileName = new TableColumn<>("File name");
 		fileName.setCellValueFactory(new PropertyValueFactory<>("fileName"));
-		fileName.prefWidthProperty().bind(widthProperty().subtract(DO_COMMIT_WIDTH + REPLICATION_WIDTH + OFFSET));
+		fileName.prefWidthProperty().bind(widthProperty().subtract(DO_COMMIT_WIDTH + STATUS_WIDTH + REPLICATION_WIDTH + OFFSET));
 		getColumns().add(fileName);
 
 		TableColumn<SvnItem, DbUpdateLocation> replication = new TableColumn<>("Replicate");

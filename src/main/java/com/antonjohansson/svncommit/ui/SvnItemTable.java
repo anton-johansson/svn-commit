@@ -1,6 +1,7 @@
 package com.antonjohansson.svncommit.ui;
 
 import static javafx.scene.input.KeyCode.ENTER;
+import static javafx.scene.input.KeyCode.SPACE;
 
 import java.util.function.Consumer;
 
@@ -36,6 +37,7 @@ public class SvnItemTable extends TableView<SvnItem>
 	private static final int OFFSET = 2;
 
 	private Consumer<SvnItem> enterHandler;
+	private Consumer<SvnItem> spaceHandler;
 
 	public SvnItemTable()
 	{
@@ -93,12 +95,31 @@ public class SvnItemTable extends TableView<SvnItem>
 			{
 				enterHandler.accept(getSelectedItem());
 			}
+			if (SPACE.equals(e.getCode()))
+			{
+				spaceHandler.accept(getSelectedItem());
+			}
 		});
 	}
 
+	/**
+	 * Sets a handler to execute when the enter key (or double click) is pressed.
+	 *
+	 * @param enterHandler The handler to set.
+	 */
 	public void setEnterHandler(Consumer<SvnItem> enterHandler)
 	{
 		this.enterHandler = enterHandler;
+	}
+
+	/**
+	 * Sets a handler to execute when the space key is pressed.
+	 *
+	 * @param spaceHandler The handler to set.
+	 */
+	public void setSpaceHandler(Consumer<SvnItem> spaceHandler)
+	{
+		this.spaceHandler = spaceHandler;
 	}
 
 	private SvnItem getSelectedItem()

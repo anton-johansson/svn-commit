@@ -38,6 +38,7 @@ public class MainApplication extends Application
 
 		table = new SvnItemTable();
 		table.setEnterHandler(i -> SVN.compare(directory, i.getFileName()));
+		table.setSpaceHandler(i -> i.flip());
 
 		StackPane root = new StackPane();
 		root.getChildren().add(table);

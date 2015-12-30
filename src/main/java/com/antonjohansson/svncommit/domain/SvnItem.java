@@ -72,4 +72,12 @@ public class SvnItem
 	{
 		return replication.getValue();
 	}
+
+	/**
+	 * Flips the 'Do commit' property.
+	 */
+	public void flip()
+	{
+		doCommit.set(!doCommit.get());
+	}
 }

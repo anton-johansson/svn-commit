@@ -49,6 +49,7 @@ public class SvnItemTable extends TableView<SvnItem>
 		doCommit.setCellFactory(CheckBoxTableCell.forTableColumn(doCommit));
 		doCommit.setPrefWidth(DO_COMMIT_WIDTH);
 		doCommit.setEditable(true);
+		doCommit.setResizable(false);
 		getColumns().add(doCommit);
 
 		TableColumn<SvnItem, FileStatus> status = new TableColumn<>("Status");

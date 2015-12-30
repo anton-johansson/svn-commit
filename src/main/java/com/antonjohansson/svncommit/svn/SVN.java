@@ -16,6 +16,8 @@ import com.antonjohansson.svncommit.utils.Bash;
  */
 public final class SVN
 {
+	private static final String COMPARE_COMMAND_PATTERN = "meld '%F'";
+
 	private SVN() {}
 
 	/**
@@ -26,9 +28,8 @@ public final class SVN
 	 */
 	public static Collection<SvnItem> getModifiedItems(File directory)
 	{
-		Collection<String> statusLines = Bash.execute(s ->  readLines(s), directory, "svn status");
-
-		return statusLines.stream()
+		return Bash.execute(s ->  readLines(s), directory, "svn status")
+			.stream()
 			.map(Converter::convertFile)
 			.collect(toList());
 	}
@@ -41,8 +42,7 @@ public final class SVN
 	 */
 	public static void compare(File directory, String fileName)
 	{
-		String command = "meld ".concat(fileName);
-
+		String command = COMPARE_COMMAND_PATTERN.replace("%F", fileName);
 		Bash.execute(directory, command);
 	}
 }

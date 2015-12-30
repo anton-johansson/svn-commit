@@ -13,7 +13,7 @@ import com.antonjohansson.svncommit.domain.SvnItem;
  */
 public final class Converter
 {
-	private static final Pattern PATTERN = Pattern.compile("^(M|A|\\?)\\s*(.*)$");
+	private static final Pattern PATTERN = Pattern.compile("^(M|A|\\?|!)\\s*(.*)$");
 
 	private Converter() {}
 

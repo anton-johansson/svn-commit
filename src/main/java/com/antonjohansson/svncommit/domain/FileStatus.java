@@ -10,6 +10,9 @@ public enum FileStatus
 	/** The file is not under source control. */
 	UNVERSIONED('?', "Unversioned", false),
 
+	/** The file is under version control, but is missing in the working copy. */
+	MISSING('!', "Missing", false),
+
 	/** The file is not under source control, but is set to be added. */
 	ADDED('A', "Added", true),
 

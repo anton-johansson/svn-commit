@@ -5,6 +5,7 @@ import static javafx.collections.FXCollections.observableArrayList;
 import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import com.antonjohansson.svncommit.domain.SvnItem;
 import com.antonjohansson.svncommit.svn.SVN;
@@ -37,15 +38,15 @@ public class MainApplication extends Application
 		File directory = new File(path.get());
 
 		table = new SvnItemTable();
-		table.setEnterHandler(i -> SVN.compare(directory, i.fileNameProperty().getValue()));
-		table.setSpaceHandler(i -> i.flip());
+		table.setEnterHandler(new CompareEnterHandler(directory));
+		table.setSpaceHandler(new SwitchDoCommitSpaceHandler());
 
 		StackPane root = new StackPane();
 		root.getChildren().add(table);
 		stage.setScene(new Scene(root));
 		stage.setWidth(1200);
 		stage.setHeight(300);
-		stage.setTitle("SVN Commit");
+		stage.setTitle("svn-commit");
 		stage.show();
 
 		runLater(() ->
@@ -69,5 +70,53 @@ public class MainApplication extends Application
 			return Optional.empty();
 		}
 		return Optional.of(getParameters().getRaw().iterator().next());
+	}
+
+	/**
+	 * Handles Enter clicks by bringing up compare windows for each item.
+	 *
+	 * @author Anton Johansson
+	 */
+	private static class CompareEnterHandler implements Consumer<Collection<SvnItem>>
+	{
+		private final File directory;
+
+		CompareEnterHandler(File directory)
+		{
+			this.directory = directory;
+		}
+
+		@Override
+		public void accept(Collection<SvnItem> item)
+		{
+			int size = item.size();
+			if (size > 5)
+			{
+				Alerter.error("I won't open up that many compare windows!");
+				return;
+			}
+			if (size > 1 && !Alerter.confirm("Do you want to open up %d compare windows?", size))
+			{
+				return;
+			}
+
+			item.forEach(i -> SVN.compare(directory, i.fileNameProperty().getValue()));
+		}
+	}
+
+	/**
+	 * Handles Space clicks by switching the 'doCommit' property.
+	 *
+	 * @author Anton Johansson
+	 */
+	private static class SwitchDoCommitSpaceHandler implements Consumer<Collection<SvnItem>>
+	{
+		@Override
+		public void accept(Collection<SvnItem> items)
+		{
+			boolean allMarked = items.stream().allMatch(i -> i.doCommitProperty().get());
+			boolean doCommit = !allMarked;
+			items.stream().forEach(i -> i.doCommitProperty().setValue(doCommit));
+		}
 	}
 }

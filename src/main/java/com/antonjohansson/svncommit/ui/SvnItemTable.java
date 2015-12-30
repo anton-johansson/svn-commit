@@ -3,12 +3,14 @@ package com.antonjohansson.svncommit.ui;
 import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.SPACE;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 
 import com.antonjohansson.svncommit.domain.DbUpdateLocation;
 import com.antonjohansson.svncommit.domain.FileStatus;
 import com.antonjohansson.svncommit.domain.SvnItem;
 
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,13 +38,14 @@ public class SvnItemTable extends TableView<SvnItem>
 	/** The offset, to avoid a scroll bar. */
 	private static final int OFFSET = 2;
 
-	private Consumer<SvnItem> enterHandler;
-	private Consumer<SvnItem> spaceHandler;
+	private Consumer<Collection<SvnItem>> enterHandler;
+	private Consumer<Collection<SvnItem>> spaceHandler;
 
 	public SvnItemTable()
 	{
 		setEditable(true);
 		setHandlers();
+		getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		TableColumn<SvnItem, Boolean> doCommit = new TableColumn<>("");
 		doCommit.setCellValueFactory(p -> p.getValue().doCommitProperty());
@@ -88,18 +91,18 @@ public class SvnItemTable extends TableView<SvnItem>
 		{
 			if (e.getClickCount() == 2)
 			{
-				enterHandler.accept(getSelectedItem());
+				enterHandler.accept(getSelectedItems());
 			}
 		});
 		setOnKeyPressed(e ->
 		{
 			if (ENTER.equals(e.getCode()))
 			{
-				enterHandler.accept(getSelectedItem());
+				enterHandler.accept(getSelectedItems());
 			}
 			if (SPACE.equals(e.getCode()))
 			{
-				spaceHandler.accept(getSelectedItem());
+				spaceHandler.accept(getSelectedItems());
 			}
 		});
 	}
@@ -109,7 +112,7 @@ public class SvnItemTable extends TableView<SvnItem>
 	 *
 	 * @param enterHandler The handler to set.
 	 */
-	public void setEnterHandler(Consumer<SvnItem> enterHandler)
+	public void setEnterHandler(Consumer<Collection<SvnItem>> enterHandler)
 	{
 		this.enterHandler = enterHandler;
 	}
@@ -119,14 +122,14 @@ public class SvnItemTable extends TableView<SvnItem>
 	 *
 	 * @param spaceHandler The handler to set.
 	 */
-	public void setSpaceHandler(Consumer<SvnItem> spaceHandler)
+	public void setSpaceHandler(Consumer<Collection<SvnItem>> spaceHandler)
 	{
 		this.spaceHandler = spaceHandler;
 	}
 
-	private SvnItem getSelectedItem()
+	private Collection<SvnItem> getSelectedItems()
 	{
-		return getSelectionModel().getSelectedItem();
+		return getSelectionModel().getSelectedItems();
 	}
 
 	/**

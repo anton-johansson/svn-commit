@@ -52,7 +52,7 @@ public class SvnItemTable extends TableView<SvnItem>
 		getColumns().add(doCommit);
 
 		TableColumn<SvnItem, FileStatus> status = new TableColumn<>("Status");
-		status.setCellValueFactory(new PropertyValueFactory<>("status"));
+		status.setCellValueFactory(p -> p.getValue().statusProperty());
 		status.setCellFactory(s ->
 		{
 			return new TableCell<SvnItem, FileStatus>()
@@ -69,12 +69,13 @@ public class SvnItemTable extends TableView<SvnItem>
 		getColumns().add(status);
 
 		TableColumn<SvnItem, String> fileName = new TableColumn<>("File name");
-		fileName.setCellValueFactory(new PropertyValueFactory<>("fileName"));
+		fileName.setCellValueFactory(p -> p.getValue().fileNameProperty());
 		fileName.prefWidthProperty().bind(widthProperty().subtract(DO_COMMIT_WIDTH + STATUS_WIDTH + REPLICATION_WIDTH + OFFSET));
 		getColumns().add(fileName);
 
 		TableColumn<SvnItem, DbUpdateLocation> replication = new TableColumn<>("Replicate");
 		replication.setCellValueFactory(new PropertyValueFactory<>("replication"));
+		replication.setCellValueFactory(p -> p.getValue().replicationProperty());
 		replication.setCellFactory(ComboBoxTableCell.forTableColumn(new ReplicationStringConverter(), DbUpdateLocation.values()));
 		replication.setPrefWidth(REPLICATION_WIDTH);
 		getColumns().add(replication);

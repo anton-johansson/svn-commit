@@ -17,7 +17,7 @@ public class ConverterTest extends Assert
 	{
 		SvnItem item = Converter.convertFile("M      some/file/path.txt");
 
-		assertEquals("some/file/path.txt", item.getFileName());
+		assertEquals("some/file/path.txt", item.fileNameProperty().getValue());
 	}
 
 	@Test
@@ -25,6 +25,6 @@ public class ConverterTest extends Assert
 	{
 		SvnItem item = Converter.convertFile("A      some/file/path.txt");
 
-		assertEquals("some/file/path.txt", item.getFileName());
+		assertEquals("some/file/path.txt", item.fileNameProperty().getValue());
 	}
 }

@@ -16,61 +16,36 @@ import javafx.beans.property.StringProperty;
  */
 public class SvnItem
 {
-	private final BooleanProperty doCommit = new SimpleBooleanProperty(this, "doCommit");
-	private final Property<FileStatus> status = new SimpleObjectProperty<>(this, "status");
-	private final StringProperty fileName = new SimpleStringProperty(this, "fileName", "");
-	private final Property<DbUpdateLocation> replication = new SimpleObjectProperty<>(this, "replication", NONE);
+	private final BooleanProperty doCommitProperty = new SimpleBooleanProperty();
+	private final Property<FileStatus> statusProperty = new SimpleObjectProperty<>();
+	private final StringProperty fileNameProperty = new SimpleStringProperty();
+	private final Property<DbUpdateLocation> replicationProperty = new SimpleObjectProperty<>(NONE);
 
 	public SvnItem(String fileName, FileStatus status)
 	{
-		setFileName(fileName);
-		setStatus(status);
-		setDoCommit(status.isDoCommitByDefault());
-	}
-
-	public boolean isDoCommit()
-	{
-		return doCommit.getValue();
-	}
-
-	public void setDoCommit(boolean doCommit)
-	{
-		this.doCommit.setValue(doCommit);
+		this.fileNameProperty.setValue(fileName);
+		this.statusProperty.setValue(status);
+		this.doCommitProperty.setValue(status.isDoCommitByDefault());
 	}
 
 	public BooleanProperty doCommitProperty()
 	{
-		return doCommit;
+		return doCommitProperty;
 	}
 
-	public FileStatus getStatus()
+	public Property<FileStatus> statusProperty()
 	{
-		return this.status.getValue();
+		return statusProperty;
 	}
 
-	public void setStatus(FileStatus status)
+	public StringProperty fileNameProperty()
 	{
-		this.status.setValue(status);
+		return fileNameProperty;
 	}
 
-	public String getFileName()
+	public Property<DbUpdateLocation> replicationProperty()
 	{
-		return fileName.getValue();
-	}
-
-	public void setFileName(String fileName)
-	{
-		this.fileName.setValue(fileName);
-	}
-
-	public void setReplication(DbUpdateLocation replication)
-	{
-		this.replication.setValue(replication);
-	}
-
-	public DbUpdateLocation getReplication()
-	{
-		return replication.getValue();
+		return replicationProperty;
 	}
 
 	/**
@@ -78,6 +53,6 @@ public class SvnItem
 	 */
 	public void flip()
 	{
-		doCommit.set(!doCommit.get());
+		doCommitProperty.set(!doCommitProperty.get());
 	}
 }

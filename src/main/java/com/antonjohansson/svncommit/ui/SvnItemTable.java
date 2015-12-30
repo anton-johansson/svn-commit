@@ -1,5 +1,7 @@
 package com.antonjohansson.svncommit.ui;
 
+import static javafx.scene.input.KeyCode.ENTER;
+
 import java.util.function.Consumer;
 
 import com.antonjohansson.svncommit.domain.DbUpdateLocation;
@@ -33,18 +35,12 @@ public class SvnItemTable extends TableView<SvnItem>
 	/** The offset, to avoid a scroll bar. */
 	private static final int OFFSET = 2;
 
-	private Consumer<SvnItem> doubleClickHandler;
+	private Consumer<SvnItem> enterHandler;
 
 	public SvnItemTable()
 	{
 		setEditable(true);
-		setOnMouseClicked(e ->
-		{
-			if (e.getClickCount() == 2)
-			{
-				doubleClickHandler.accept(getSelectionModel().getSelectedItem());
-			}
-		});
+		setHandlers();
 
 		TableColumn<SvnItem, Boolean> doCommit = new TableColumn<>("");
 		doCommit.setCellValueFactory(p -> p.getValue().doCommitProperty());
@@ -82,9 +78,32 @@ public class SvnItemTable extends TableView<SvnItem>
 		getColumns().add(replication);
 	}
 
-	public void setRowDoubleClickHandler(Consumer<SvnItem> doubleClickHandler)
+	private void setHandlers()
 	{
-		this.doubleClickHandler = doubleClickHandler;
+		setOnMouseClicked(e ->
+		{
+			if (e.getClickCount() == 2)
+			{
+				enterHandler.accept(getSelectedItem());
+			}
+		});
+		setOnKeyPressed(e ->
+		{
+			if (ENTER.equals(e.getCode()))
+			{
+				enterHandler.accept(getSelectedItem());
+			}
+		});
+	}
+
+	public void setEnterHandler(Consumer<SvnItem> enterHandler)
+	{
+		this.enterHandler = enterHandler;
+	}
+
+	private SvnItem getSelectedItem()
+	{
+		return getSelectionModel().getSelectedItem();
 	}
 
 	/**

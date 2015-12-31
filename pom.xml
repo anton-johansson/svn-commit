@@ -4,9 +4,37 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.antonjohansson</groupId>
 	<artifactId>svn-commit</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>Anton Johansson :: SVN Commit</name>
 	<description>Commits to SVN and replicates to DBUpdate.</description>
+	<url>https://github.com/anton-johansson/svn-commit</url>
+
+	<licenses>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>anton-johansson</id>
+			<name>Anton Johansson</name>
+			<email>antoon.johansson@gmail.com</email>
+			<url>http://anton-johansson.com</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>https://github.com/anton-johansson/svn-commit</url>
+		<connection>scm:git:git://github.com/anton-johansson/svn-commit.git</connection>
+		<developerConnection>scm:git:git@github.com:anton-johansson/svn-commit.git</developerConnection>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/anton-johansson/svn-commit/issues</url>
+	</issueManagement>
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -15,14 +43,11 @@
 	</properties>
 
 	<dependencies>
-		<!-- External libraries -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-
-		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

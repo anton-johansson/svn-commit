@@ -2,6 +2,9 @@ package com.antonjohansson.svncommit.domain;
 
 import static com.antonjohansson.svncommit.domain.DbUpdateLocation.NONE;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -54,5 +57,16 @@ public class SvnItem
 	public void flip()
 	{
 		doCommitProperty.set(!doCommitProperty.get());
+	}
+
+	/**
+	 * Gets whether or not this item can be replicated.
+	 *
+	 * @return Returns {@code true} if this item can be replicated.
+	 */
+	public boolean canReplicate()
+	{
+		String extension = FilenameUtils.getExtension(fileNameProperty.getValue());
+		return StringUtils.equalsIgnoreCase(extension, "SQL");
 	}
 }

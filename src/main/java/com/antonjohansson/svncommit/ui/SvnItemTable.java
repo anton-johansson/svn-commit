@@ -2,6 +2,7 @@ package com.antonjohansson.svncommit.ui;
 
 import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.SPACE;
+import static javafx.scene.paint.Color.LIGHTGRAY;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -78,7 +79,7 @@ public class SvnItemTable extends TableView<SvnItem>
 
 		TableColumn<SvnItem, DbUpdateLocation> replication = new TableColumn<>("Replicate");
 		replication.setCellValueFactory(p -> p.getValue().replicationProperty());
-		replication.setCellFactory(ComboBoxTableCell.forTableColumn(new ReplicationStringConverter(), DbUpdateLocation.values()));
+		replication.setCellFactory(p -> new ReplicationCell());
 		replication.setPrefWidth(REPLICATION_WIDTH);
 		getColumns().add(replication);
 	}
@@ -135,7 +136,7 @@ public class SvnItemTable extends TableView<SvnItem>
 	 *
 	 * @author Anton Johansson
 	 */
-	private class ReplicationStringConverter extends StringConverter<DbUpdateLocation>
+	private static class ReplicationStringConverter extends StringConverter<DbUpdateLocation>
 	{
 		@Override
 		public String toString(DbUpdateLocation object)
@@ -147,6 +148,35 @@ public class SvnItemTable extends TableView<SvnItem>
 		public DbUpdateLocation fromString(String string)
 		{
 			throw new RuntimeException("Cannot convert to DbUpdateLocation from a string.");
+		}
+	}
+
+	/**
+	 * Cell used for the 'Replication' column.
+	 *
+	 * @author Anton Johansson
+	 */
+	private class ReplicationCell extends ComboBoxTableCell<SvnItem, DbUpdateLocation>
+	{
+		private ReplicationCell()
+		{
+			super(new ReplicationStringConverter(), DbUpdateLocation.values());
+		}
+
+		@Override
+		public void updateItem(DbUpdateLocation location, boolean empty)
+		{
+			super.updateItem(location, empty);
+			if (!empty)
+			{
+				SvnItem item = (SvnItem) getTableRow().getItem();
+				boolean canReplicate = item.canReplicate();
+				setEditable(canReplicate);
+				if (!canReplicate)
+				{
+					setTextFill(LIGHTGRAY);
+				}
+			}
 		}
 	}
 }

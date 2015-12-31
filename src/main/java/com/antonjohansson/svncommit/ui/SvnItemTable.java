@@ -16,7 +16,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
 /**
@@ -78,7 +77,6 @@ public class SvnItemTable extends TableView<SvnItem>
 		getColumns().add(fileName);
 
 		TableColumn<SvnItem, DbUpdateLocation> replication = new TableColumn<>("Replicate");
-		replication.setCellValueFactory(new PropertyValueFactory<>("replication"));
 		replication.setCellValueFactory(p -> p.getValue().replicationProperty());
 		replication.setCellFactory(ComboBoxTableCell.forTableColumn(new ReplicationStringConverter(), DbUpdateLocation.values()));
 		replication.setPrefWidth(REPLICATION_WIDTH);

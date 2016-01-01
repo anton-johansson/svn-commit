@@ -1,4 +1,5 @@
 package com.antonjohansson.svncommit;
+
 import static javafx.application.Application.launch;
 
 /**

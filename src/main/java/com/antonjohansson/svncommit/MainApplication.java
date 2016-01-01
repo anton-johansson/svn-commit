@@ -1,4 +1,5 @@
 package com.antonjohansson.svncommit;
+
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 

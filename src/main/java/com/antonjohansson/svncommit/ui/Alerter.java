@@ -47,7 +47,6 @@ public final class Alerter
 	 */
 	public static boolean confirm(String question, Object... args)
 	{
-
 		Alert alert = new Alert(WARNING);
 		alert.setTitle("svn-commit");
 		alert.setContentText(format(question, args));

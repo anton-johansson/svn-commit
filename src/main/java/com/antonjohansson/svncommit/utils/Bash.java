@@ -63,6 +63,13 @@ public final class Bash
 		}
 	}
 
+	/**
+	 * Executes given script file in given directory.
+	 *
+	 * @param directory The directory to execute command lines within.
+	 * @param scriptFile The script file to execute.
+	 * @return Returns the process.
+	 */
 	private static Process execute(File directory, File scriptFile) throws IOException
 	{
 		return new ProcessBuilder("bash", scriptFile.getAbsolutePath())
@@ -70,15 +77,21 @@ public final class Bash
 			.start();
 	}
 
-	private static File getTemporaryScriptFile(Collection<String> lines)
+	/**
+	 * Creates a temporary bash script with the given command lines.
+	 *
+	 * @param commandLines The command lines to add to the bash script.
+	 * @return Returns the bash script {@link File}.
+	 */
+	private static File getTemporaryScriptFile(Collection<String> commandLines)
 	{
 		try
 		{
 			File temporaryFile = createTempFile("svn-commit-temporary-script", "tmp");
 			writeStringToFile(temporaryFile, "#!/bin/bash".concat(lineSeparator()), true);
-			for (String line : lines)
+			for (String commandLine : commandLines)
 			{
-				writeStringToFile(temporaryFile, line.concat(lineSeparator()), true);
+				writeStringToFile(temporaryFile, commandLine.concat(lineSeparator()), true);
 			}
 			return temporaryFile;
 		}

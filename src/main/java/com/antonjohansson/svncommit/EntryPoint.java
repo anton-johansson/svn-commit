@@ -25,7 +25,9 @@ public class EntryPoint
 		String[] innerArguments = remove(arguments, 0);
 		switch (arguments[0])
 		{
-			case "commit":	launch(CommitApplication.class, innerArguments);
+			case "commit":
+				launch(CommitApplication.class, innerArguments);
+				break;
 
 			default:
 				System.err.println("Invalid usage");

@@ -1,5 +1,10 @@
 package com.antonjohansson.svncommit;
 
+import com.antonjohansson.svncommit.domain.SvnItem;
+import com.antonjohansson.svncommit.svn.SVN;
+import com.antonjohansson.svncommit.ui.Alerter;
+import com.antonjohansson.svncommit.ui.SvnItemTable;
+
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -7,11 +12,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import com.antonjohansson.svncommit.domain.SvnItem;
-import com.antonjohansson.svncommit.svn.SVN;
-import com.antonjohansson.svncommit.ui.Alerter;
-import com.antonjohansson.svncommit.ui.SvnItemTable;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -88,9 +88,9 @@ public class MainApplication extends Application
 		}
 
 		@Override
-		public void accept(Collection<SvnItem> item)
+		public void accept(Collection<SvnItem> items)
 		{
-			int size = item.size();
+			int size = items.size();
 			if (size > 5)
 			{
 				Alerter.error("I won't open up that many compare windows!");
@@ -101,7 +101,7 @@ public class MainApplication extends Application
 				return;
 			}
 
-			item.forEach(i -> SVN.compare(directory, i.fileNameProperty().getValue()));
+			items.forEach(i -> SVN.compare(directory, i.fileNameProperty().getValue()));
 		}
 	}
 
@@ -117,7 +117,7 @@ public class MainApplication extends Application
 		{
 			boolean allMarked = items.stream().allMatch(i -> i.doCommitProperty().get());
 			boolean doCommit = !allMarked;
-			items.stream().forEach(i -> i.doCommitProperty().setValue(doCommit));
+			items.forEach(i -> i.doCommitProperty().setValue(doCommit));
 		}
 	}
 }

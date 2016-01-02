@@ -1,9 +1,10 @@
 package com.antonjohansson.svncommit.svn;
 
+import com.antonjohansson.svncommit.core.domain.SvnItem;
+import com.antonjohansson.svncommit.core.svn.Converter;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.antonjohansson.svncommit.domain.SvnItem;
 
 /**
  * Unit tests of {@link Converter}.

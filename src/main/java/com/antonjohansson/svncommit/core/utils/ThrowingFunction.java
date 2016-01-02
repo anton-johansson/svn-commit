@@ -1,4 +1,4 @@
-package com.antonjohansson.svncommit.utils;
+package com.antonjohansson.svncommit.core.utils;
 
 import java.util.function.Function;
 

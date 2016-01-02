@@ -1,4 +1,9 @@
-package com.antonjohansson.svncommit;
+package com.antonjohansson.svncommit.application.commit;
+
+import com.antonjohansson.svncommit.core.domain.SvnItem;
+import com.antonjohansson.svncommit.core.svn.SVN;
+import com.antonjohansson.svncommit.core.ui.Alerter;
+import com.antonjohansson.svncommit.core.ui.SvnItemTable;
 
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -8,11 +13,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import com.antonjohansson.svncommit.domain.SvnItem;
-import com.antonjohansson.svncommit.svn.SVN;
-import com.antonjohansson.svncommit.ui.Alerter;
-import com.antonjohansson.svncommit.ui.SvnItemTable;
-
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -20,31 +20,30 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
- * Defines the main application.
+ * Defines the application that handles the commit dialog.
  *
  * @author Anton Johansson
  */
-public class MainApplication extends Application
+public class CommitApplication extends Application
 {
-	private SvnItemTable table;
+	private final ObservableList<SvnItem> items;
+
+	public CommitApplication()
+	{
+		items = observableArrayList();
+	}
 
 	@Override
 	public void start(Stage stage) throws Exception
 	{
-		Optional<String> path = getPath();
-		if (!path.isPresent())
+		Optional<File> directory = getDirectory();
+		if (!directory.isPresent())
 		{
 			return;
 		}
-		File directory = new File(path.get());
 
-		table = new SvnItemTable();
-		table.setEnterHandler(new CompareEnterHandler(directory));
-		table.setSpaceHandler(new SwitchDoCommitSpaceHandler());
-
-		StackPane root = new StackPane();
-		root.getChildren().add(table);
-		stage.setScene(new Scene(root));
+		Scene scene = getScene(directory.get());
+		stage.setScene(scene);
 		stage.setWidth(1200);
 		stage.setHeight(300);
 		stage.setTitle("svn-commit");
@@ -52,13 +51,30 @@ public class MainApplication extends Application
 
 		runLater(() ->
 		{
-			Collection<SvnItem> modifiedItems = SVN.getModifiedItems(directory);
-			ObservableList<SvnItem> items = observableArrayList(modifiedItems);
-			table.setItems(items);
+			Collection<SvnItem> modifiedItems = SVN.getModifiedItems(directory.get());
+			items.setAll(modifiedItems);
 		});
 	}
 
-	private Optional<String> getPath()
+	private Scene getScene(File directory)
+	{
+		SvnItemTable table = new SvnItemTable();
+		table.setItems(items);
+		table.setEnterHandler(new CompareEnterHandler(directory));
+		table.setSpaceHandler(new SwitchDoCommitSpaceHandler());
+
+		StackPane root = new StackPane();
+		root.getChildren().add(table);
+
+		Scene scene = new Scene(root);
+		scene.setOnKeyPressed(e ->
+		{
+
+		});
+		return scene;
+	}
+
+	private Optional<File> getDirectory()
 	{
 		if (getParameters().getRaw().isEmpty())
 		{
@@ -70,7 +86,8 @@ public class MainApplication extends Application
 			Alerter.error("Too many arguments was specified.");
 			return Optional.empty();
 		}
-		return Optional.of(getParameters().getRaw().iterator().next());
+		String directory = getParameters().getRaw().iterator().next();
+		return Optional.of(new File(directory));
 	}
 
 	/**
@@ -88,9 +105,9 @@ public class MainApplication extends Application
 		}
 
 		@Override
-		public void accept(Collection<SvnItem> item)
+		public void accept(Collection<SvnItem> items)
 		{
-			int size = item.size();
+			int size = items.size();
 			if (size > 5)
 			{
 				Alerter.error("I won't open up that many compare windows!");
@@ -101,7 +118,7 @@ public class MainApplication extends Application
 				return;
 			}
 
-			item.forEach(i -> SVN.compare(directory, i.fileNameProperty().getValue()));
+			items.forEach(i -> SVN.compare(directory, i.fileNameProperty().getValue()));
 		}
 	}
 

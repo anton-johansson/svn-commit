@@ -1,13 +1,13 @@
-package com.antonjohansson.svncommit.svn;
+package com.antonjohansson.svncommit.core.svn;
+
+import com.antonjohansson.svncommit.core.domain.SvnItem;
+import com.antonjohansson.svncommit.core.utils.Bash;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.io.IOUtils.readLines;
 
 import java.io.File;
 import java.util.Collection;
-
-import com.antonjohansson.svncommit.domain.SvnItem;
-import com.antonjohansson.svncommit.utils.Bash;
 
 /**
  * Provides utility methods for working with SVN.
@@ -28,7 +28,7 @@ public final class SVN
 	 */
 	public static Collection<SvnItem> getModifiedItems(File directory)
 	{
-		return Bash.execute(s ->  readLines(s), directory, "svn status")
+		return Bash.execute(s -> readLines(s), directory, "svn status")
 			.stream()
 			.map(Converter::convertFile)
 			.collect(toList());

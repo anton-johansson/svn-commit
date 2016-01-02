@@ -1,4 +1,8 @@
-package com.antonjohansson.svncommit.ui;
+package com.antonjohansson.svncommit.core.ui;
+
+import com.antonjohansson.svncommit.core.domain.DbUpdateLocation;
+import com.antonjohansson.svncommit.core.domain.FileStatus;
+import com.antonjohansson.svncommit.core.domain.SvnItem;
 
 import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.SPACE;
@@ -6,10 +10,6 @@ import static javafx.scene.paint.Color.LIGHTGRAY;
 
 import java.util.Collection;
 import java.util.function.Consumer;
-
-import com.antonjohansson.svncommit.domain.DbUpdateLocation;
-import com.antonjohansson.svncommit.domain.FileStatus;
-import com.antonjohansson.svncommit.domain.SvnItem;
 
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;

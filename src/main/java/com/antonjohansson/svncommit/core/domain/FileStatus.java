@@ -1,4 +1,4 @@
-package com.antonjohansson.svncommit.domain;
+package com.antonjohansson.svncommit.core.domain;
 
 /**
  * Defines various file statuses.

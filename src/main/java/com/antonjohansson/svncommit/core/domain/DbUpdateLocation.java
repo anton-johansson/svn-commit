@@ -1,4 +1,4 @@
-package com.antonjohansson.svncommit.domain;
+package com.antonjohansson.svncommit.core.domain;
 
 /**
  * Defines various locations within the DBUpdate repository where committed files should be replicated to.

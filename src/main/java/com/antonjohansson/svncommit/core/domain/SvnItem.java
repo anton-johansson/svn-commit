@@ -1,6 +1,6 @@
-package com.antonjohansson.svncommit.domain;
+package com.antonjohansson.svncommit.core.domain;
 
-import static com.antonjohansson.svncommit.domain.DbUpdateLocation.NONE;
+import static com.antonjohansson.svncommit.core.domain.DbUpdateLocation.NONE;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;

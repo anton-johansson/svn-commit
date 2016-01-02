@@ -5,11 +5,6 @@ import com.antonjohansson.svncommit.core.svn.SVN;
 import com.antonjohansson.svncommit.core.ui.Alerter;
 import com.antonjohansson.svncommit.core.ui.SvnItemTable;
 
-import com.antonjohansson.svncommit.domain.SvnItem;
-import com.antonjohansson.svncommit.svn.SVN;
-import com.antonjohansson.svncommit.ui.Alerter;
-import com.antonjohansson.svncommit.ui.SvnItemTable;
-
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 

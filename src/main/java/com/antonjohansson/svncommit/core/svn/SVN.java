@@ -3,6 +3,9 @@ package com.antonjohansson.svncommit.core.svn;
 import com.antonjohansson.svncommit.core.domain.SvnItem;
 import com.antonjohansson.svncommit.core.utils.Bash;
 
+import com.antonjohansson.svncommit.domain.SvnItem;
+import com.antonjohansson.svncommit.utils.Bash;
+
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.io.IOUtils.readLines;
 

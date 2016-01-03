@@ -3,10 +3,11 @@ package com.antonjohansson.svncommit.application.commit;
 import com.antonjohansson.svncommit.core.domain.SvnItem;
 import com.antonjohansson.svncommit.core.svn.SVN;
 import com.antonjohansson.svncommit.core.ui.Alerter;
+import com.antonjohansson.svncommit.core.ui.LoadingOverlay;
 import com.antonjohansson.svncommit.core.ui.SvnItemTable;
 
-import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.scene.input.KeyCode.F5;
 
 import java.io.File;
 import java.util.Collection;
@@ -16,7 +17,6 @@ import java.util.function.Consumer;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -27,10 +27,12 @@ import javafx.stage.Stage;
 public class CommitApplication extends Application
 {
 	private final ObservableList<SvnItem> items;
+	private final LoadingOverlay loadingOverlay;
 
 	public CommitApplication()
 	{
 		items = observableArrayList();
+		loadingOverlay = new LoadingOverlay();
 	}
 
 	@Override
@@ -42,34 +44,34 @@ public class CommitApplication extends Application
 			return;
 		}
 
-		Scene scene = getScene(directory.get());
+		RefreshCommand refreshCommand = new RefreshCommand(items, directory.get());
+
+		Scene scene = getScene(directory.get(), refreshCommand);
 		stage.setScene(scene);
 		stage.setWidth(1200);
 		stage.setHeight(300);
 		stage.setTitle("svn-commit");
 		stage.show();
 
-		runLater(() ->
-		{
-			Collection<SvnItem> modifiedItems = SVN.getModifiedItems(directory.get());
-			items.setAll(modifiedItems);
-		});
+		loadingOverlay.load(refreshCommand);
 	}
 
-	private Scene getScene(File directory)
+	private Scene getScene(File directory, RefreshCommand refreshCommand)
 	{
 		SvnItemTable table = new SvnItemTable();
 		table.setItems(items);
 		table.setEnterHandler(new CompareEnterHandler(directory));
 		table.setSpaceHandler(new SwitchDoCommitSpaceHandler());
 
-		StackPane root = new StackPane();
-		root.getChildren().add(table);
+		loadingOverlay.setContentNode(table);
 
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(loadingOverlay);
 		scene.setOnKeyPressed(e ->
 		{
-
+			if (F5.equals(e.getCode()))
+			{
+				loadingOverlay.load(refreshCommand);
+			}
 		});
 		return scene;
 	}

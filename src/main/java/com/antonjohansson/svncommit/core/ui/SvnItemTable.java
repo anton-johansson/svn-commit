@@ -167,9 +167,9 @@ public class SvnItemTable extends TableView<SvnItem>
 		public void updateItem(DbUpdateLocation location, boolean empty)
 		{
 			super.updateItem(location, empty);
-			if (!empty)
+			SvnItem item = (SvnItem) getTableRow().getItem();
+			if (item != null)
 			{
-				SvnItem item = (SvnItem) getTableRow().getItem();
 				boolean canReplicate = item.canReplicate();
 				setEditable(canReplicate);
 				if (!canReplicate)

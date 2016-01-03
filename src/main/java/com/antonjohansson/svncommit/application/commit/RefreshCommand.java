@@ -5,6 +5,7 @@ import com.antonjohansson.svncommit.core.svn.SVN;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -27,7 +28,24 @@ class RefreshCommand implements Consumer<Collection<SvnItem>>, Supplier<Collecti
 	@Override
 	public Collection<SvnItem> get()
 	{
-		return SVN.getModifiedItems(directory);
+		Collection<SvnItem> modifiedItems = SVN.getModifiedItems(directory);
+		for (final SvnItem modifiedItem : modifiedItems)
+		{
+			Consumer<SvnItem> action = oldItem ->
+			{
+				modifiedItem.doCommitProperty().setValue(oldItem.doCommitProperty().getValue());
+				modifiedItem.replicationProperty().setValue(oldItem.replicationProperty().getValue());
+			};
+			getOldItem(modifiedItem).ifPresent(action);
+		}
+		return modifiedItems;
+	}
+
+	private Optional<SvnItem> getOldItem(SvnItem modifiedItem)
+	{
+		return items.stream()
+			.filter(s -> s.fileNameProperty().getValue().equals(modifiedItem.fileNameProperty().getValue()))
+			.findAny();
 	}
 
 	@Override

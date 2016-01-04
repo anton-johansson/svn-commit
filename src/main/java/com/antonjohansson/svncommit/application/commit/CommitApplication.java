@@ -11,6 +11,7 @@ import static javafx.scene.input.KeyCode.F5;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -78,17 +79,18 @@ public class CommitApplication extends Application
 
 	private Optional<File> getDirectory()
 	{
-		if (getParameters().getRaw().isEmpty())
+		List<String> parameters = getParameters().getRaw();
+		if (parameters.isEmpty())
 		{
 			Alerter.error("The path parameter is missing.");
 			return Optional.empty();
 		}
-		if (getParameters().getRaw().size() > 1)
+		if (parameters.size() > 1)
 		{
 			Alerter.error("Too many arguments was specified.");
 			return Optional.empty();
 		}
-		String directory = getParameters().getRaw().iterator().next();
+		String directory = parameters.iterator().next();
 		return Optional.of(new File(directory));
 	}
 

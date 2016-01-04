@@ -120,7 +120,7 @@ public class CommitApplication extends Application
 				return;
 			}
 
-			items.forEach(i -> SVN.compare(directory, i.fileNameProperty().getValue()));
+			items.forEach(i -> SVN.compare(directory, i.getFileName()));
 		}
 	}
 
@@ -134,9 +134,9 @@ public class CommitApplication extends Application
 		@Override
 		public void accept(Collection<SvnItem> items)
 		{
-			boolean allMarked = items.stream().allMatch(i -> i.doCommitProperty().get());
+			boolean allMarked = items.stream().allMatch(i -> i.isDoCommit());
 			boolean doCommit = !allMarked;
-			items.forEach(i -> i.doCommitProperty().setValue(doCommit));
+			items.forEach(i -> i.setDoCommit(doCommit));
 		}
 	}
 }

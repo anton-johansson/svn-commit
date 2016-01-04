@@ -51,12 +51,52 @@ public class SvnItem
 		return replicationProperty;
 	}
 
+	public boolean isDoCommit()
+	{
+		return doCommitProperty.getValue();
+	}
+
+	public void setDoCommit(boolean doCommit)
+	{
+		doCommitProperty.setValue(doCommit);
+	}
+
+	public FileStatus getStatus()
+	{
+		return statusProperty.getValue();
+	}
+
+	public void setStatus(FileStatus status)
+	{
+		statusProperty.setValue(status);
+	}
+
+	public String getFileName()
+	{
+		return fileNameProperty.getValue();
+	}
+
+	public void setFileName(String fileName)
+	{
+		fileNameProperty.setValue(fileName);
+	}
+
+	public DbUpdateLocation getReplication()
+	{
+		return replicationProperty.getValue();
+	}
+
+	public void setReplication(DbUpdateLocation replication)
+	{
+		replicationProperty.setValue(replication);
+	}
+
 	/**
 	 * Flips the 'Do commit' property.
 	 */
 	public void flip()
 	{
-		doCommitProperty.set(!doCommitProperty.get());
+		setDoCommit(!isDoCommit());
 	}
 
 	/**

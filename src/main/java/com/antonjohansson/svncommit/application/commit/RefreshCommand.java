@@ -33,8 +33,8 @@ class RefreshCommand implements Consumer<Collection<SvnItem>>, Supplier<Collecti
 		{
 			Consumer<SvnItem> action = oldItem ->
 			{
-				modifiedItem.doCommitProperty().setValue(oldItem.doCommitProperty().getValue());
-				modifiedItem.replicationProperty().setValue(oldItem.replicationProperty().getValue());
+				modifiedItem.setDoCommit(oldItem.isDoCommit());
+				modifiedItem.setReplication(oldItem.getReplication());
 			};
 			getOldItem(modifiedItem).ifPresent(action);
 		}
@@ -44,7 +44,7 @@ class RefreshCommand implements Consumer<Collection<SvnItem>>, Supplier<Collecti
 	private Optional<SvnItem> getOldItem(SvnItem modifiedItem)
 	{
 		return items.stream()
-			.filter(s -> s.fileNameProperty().getValue().equals(modifiedItem.fileNameProperty().getValue()))
+			.filter(s -> s.getFileName().equals(modifiedItem.getFileName()))
 			.findAny();
 	}
 

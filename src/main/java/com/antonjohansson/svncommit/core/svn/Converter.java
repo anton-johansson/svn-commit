@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public final class Converter
 {
-	private static final Pattern PATTERN = Pattern.compile("^(M|A|\\?|!)\\s*(.*)$");
+	private static final Pattern PATTERN = Pattern.compile("^(M|A|D|\\?|!)\\s*(.*)$");
 
 	private Converter() {}
 

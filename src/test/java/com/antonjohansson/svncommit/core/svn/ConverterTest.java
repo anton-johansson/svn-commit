@@ -1,8 +1,7 @@
-package com.antonjohansson.svncommit.svn;
+package com.antonjohansson.svncommit.core.svn;
 
 import com.antonjohansson.svncommit.core.domain.FileStatus;
 import com.antonjohansson.svncommit.core.domain.SvnItem;
-import com.antonjohansson.svncommit.core.svn.Converter;
 
 import static com.antonjohansson.svncommit.core.domain.FileStatus.ADDED;
 import static com.antonjohansson.svncommit.core.domain.FileStatus.DELETED;

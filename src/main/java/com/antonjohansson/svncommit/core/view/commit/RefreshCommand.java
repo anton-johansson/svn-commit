@@ -1,4 +1,4 @@
-package com.antonjohansson.svncommit.application.commit;
+package com.antonjohansson.svncommit.core.view.commit;
 
 import com.antonjohansson.svncommit.core.domain.SvnItem;
 import com.antonjohansson.svncommit.core.svn.SVN;
@@ -16,13 +16,13 @@ import java.util.function.Supplier;
  */
 class RefreshCommand implements Consumer<Collection<SvnItem>>, Supplier<Collection<SvnItem>>
 {
-	private final Collection<SvnItem> items;
 	private final File directory;
+	private final Collection<SvnItem> items;
 
-	RefreshCommand(Collection<SvnItem> items, File directory)
+	RefreshCommand(File directory, Collection<SvnItem> items)
 	{
-		this.items = items;
 		this.directory = directory;
+		this.items = items;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.antonjohansson.svncommit.core.ui;
+package com.antonjohansson.svncommit.core.view.utils;
 
 import static javafx.application.Platform.runLater;
 import static javafx.geometry.Pos.CENTER;

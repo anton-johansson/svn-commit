@@ -1,4 +1,4 @@
-package com.antonjohansson.svncommit.core.ui;
+package com.antonjohansson.svncommit.core.view.commit;
 
 import com.antonjohansson.svncommit.core.domain.DbUpdateLocation;
 import com.antonjohansson.svncommit.core.domain.FileStatus;
@@ -24,7 +24,7 @@ import javafx.util.StringConverter;
  *
  * @author Anton Johansson
  */
-public class SvnItemTable extends TableView<SvnItem>
+class SvnItemTable extends TableView<SvnItem>
 {
 	/** The width of the commit check box column. */
 	private static final double DO_COMMIT_WIDTH = 40;

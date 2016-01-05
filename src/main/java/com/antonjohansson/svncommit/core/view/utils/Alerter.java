@@ -1,4 +1,4 @@
-package com.antonjohansson.svncommit.core.ui;
+package com.antonjohansson.svncommit.core.view.utils;
 
 import static java.lang.String.format;
 import static javafx.scene.control.Alert.AlertType.ERROR;

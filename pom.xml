@@ -53,6 +53,11 @@
 		<url>https://github.com/anton-johansson/svn-commit/issues</url>
 	</issueManagement>
 
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/anton-johansson/svn-commit</url>
+	</ciManagement>
+
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>

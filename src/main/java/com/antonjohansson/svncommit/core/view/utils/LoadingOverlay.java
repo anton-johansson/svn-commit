@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -40,7 +40,7 @@ import javafx.scene.paint.Color;
  */
 public class LoadingOverlay extends StackPane
 {
-	private final Node loadingNode;
+	private final OverlayPane loadingNode;
 
 	public LoadingOverlay()
 	{
@@ -84,6 +84,7 @@ public class LoadingOverlay extends StackPane
 			return;
 		}
 
+		loadingNode.reset();
 		loadingNode.setVisible(true);
 		new Thread(() ->
 		{
@@ -106,14 +107,13 @@ public class LoadingOverlay extends StackPane
 		private static final Color BACKGROUND_COLOR = Color.color(0.8, 0.8, 0.8, 0.9);
 		private static final Background BACKGROUND = new Background(new BackgroundFill(BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY));
 
+		private final HBox hbox;
+
 		private OverlayPane()
 		{
-			ProgressIndicator content = new ProgressIndicator();
-
-			HBox hbox = new HBox();
+			hbox = new HBox();
 			hbox.setAlignment(CENTER);
 			hbox.minWidthProperty().bind(widthProperty());
-			hbox.getChildren().add(content);
 
 			VBox vbox = new VBox();
 			vbox.setAlignment(CENTER);
@@ -122,6 +122,15 @@ public class LoadingOverlay extends StackPane
 
 			setBackground(BACKGROUND);
 			getChildren().add(vbox);
+		}
+
+		/**
+		 * Resets the progress.
+		 */
+		private void reset()
+		{
+			hbox.getChildren().clear();
+			hbox.getChildren().add(new ProgressBar());
 		}
 	}
 }

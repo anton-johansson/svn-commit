@@ -1,6 +1,6 @@
 <!--
 
-    Copyright 2015 Anton Johansson
+    Copyright (c) Anton Johansson <antoon.johansson@gmail.com>
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -91,9 +91,6 @@
 				<version>2.11</version>
 				<configuration>
 					<header>license_header.txt</header>
-					<properties>
-						<currentYear>2015</currentYear>
-					</properties>
 					<excludes>
 						<exclude>README.md</exclude>
 						<exclude>LICENSE</exclude>

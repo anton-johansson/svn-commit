@@ -45,7 +45,7 @@ public class CommitApplication extends Application
 		Scene scene = CommitSceneFactory.create(directory.get());
 		stage.setScene(scene);
 		stage.setWidth(1200);
-		stage.setHeight(300);
+		stage.setHeight(400);
 		stage.setTitle("svn-commit");
 		stage.show();
 	}

@@ -51,7 +51,7 @@ class SvnItemTable extends TableView<SvnItem>
 	private static final double REPLICATION_WIDTH = 160;
 
 	/** The offset, to avoid a scroll bar. */
-	private static final int OFFSET = 2;
+	private static final int OFFSET = 16;
 
 	private Consumer<Collection<SvnItem>> enterHandler;
 	private Consumer<Collection<SvnItem>> spaceHandler;

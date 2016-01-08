@@ -16,6 +16,7 @@
 package com.antonjohansson.svncommit.core.view.commit;
 
 import com.antonjohansson.svncommit.core.domain.SvnItem;
+import com.antonjohansson.svncommit.core.svn.SVN;
 import com.antonjohansson.svncommit.core.view.utils.LoadingOverlay;
 
 import static javafx.collections.FXCollections.observableArrayList;
@@ -42,7 +43,8 @@ public class CommitSceneFactory
 	public static Scene create(File directory)
 	{
 		ObservableList<SvnItem> items = observableArrayList();
-		CommitView commitView = new CommitView(directory, items);
+
+		CommitView commitView = new CommitView(directory, items, SVN::commit);
 		RefreshCommand refreshCommand = new RefreshCommand(directory, items);
 
 		LoadingOverlay overlay = new LoadingOverlay();

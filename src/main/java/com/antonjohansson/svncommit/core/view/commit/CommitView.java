@@ -17,14 +17,26 @@ package com.antonjohansson.svncommit.core.view.commit;
 
 import com.antonjohansson.svncommit.core.domain.SvnItem;
 import com.antonjohansson.svncommit.core.svn.SVN;
+import com.antonjohansson.svncommit.core.utils.ICommitHandler;
 import com.antonjohansson.svncommit.core.view.utils.Alerter;
+
+import static java.lang.System.lineSeparator;
+import static javafx.geometry.Orientation.VERTICAL;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 /**
  * View that shows commitable items in a folder.
@@ -33,8 +45,19 @@ import javafx.scene.layout.Pane;
  */
 class CommitView extends Pane
 {
-	CommitView(File directory, ObservableList<SvnItem> items)
+	private static final int COMMIT_PANE_WIDTH = 100;
+	private static final int PADDING = 4;
+
+	private final Collection<SvnItem> items;
+	private final ICommitHandler commitHandler;
+	private final TextArea commitMessageTextArea;
+	private final TextField activityIdTextField;
+
+	CommitView(File directory, ObservableList<SvnItem> items, ICommitHandler commitHandler)
 	{
+		this.items = items;
+		this.commitHandler = commitHandler;
+
 		SvnItemTable table = new SvnItemTable();
 		table.setItems(items);
 		table.setEnterHandler(new CompareEnterHandler(directory));
@@ -42,7 +65,53 @@ class CommitView extends Pane
 		table.prefWidthProperty().bind(widthProperty());
 		table.prefHeightProperty().bind(heightProperty());
 
-		getChildren().add(table);
+		commitMessageTextArea = new TextArea();
+		commitMessageTextArea.prefWidthProperty().bind(widthProperty().subtract(COMMIT_PANE_WIDTH));
+
+		activityIdTextField = new TextField();
+		activityIdTextField.setPromptText("Activity ID");
+		activityIdTextField.setPrefWidth(COMMIT_PANE_WIDTH - PADDING * 2);
+
+		Button commitButton = new Button("Commit");
+		commitButton.setPrefWidth(COMMIT_PANE_WIDTH - PADDING * 2);
+		commitButton.setOnMouseClicked(e -> onCommit());
+
+		VBox commitPane = new VBox(PADDING);
+		commitPane.getChildren().add(activityIdTextField);
+		commitPane.getChildren().add(commitButton);
+		commitPane.setPadding(new Insets(PADDING));
+
+		HBox hbox = new HBox();
+		hbox.getChildren().add(commitMessageTextArea);
+		hbox.getChildren().add(commitPane);
+
+		SplitPane splitter = new SplitPane();
+		splitter.setOrientation(VERTICAL);
+		splitter.getItems().setAll(table, hbox);
+
+		getChildren().add(splitter);
+	}
+
+	/**
+	 * Triggers the commit handler.
+	 */
+	private void onCommit()
+	{
+		StringBuilder message = new StringBuilder();
+		if (!activityIdTextField.getText().isEmpty())
+		{
+			message.append("Task: ")
+				.append(activityIdTextField.getText().trim())
+				.append(lineSeparator());
+		}
+		message.append(commitMessageTextArea.getText());
+
+		Collection<String> filePaths = items.stream()
+			.filter(s -> s.isDoCommit())
+			.map(s -> s.getFileName())
+			.collect(Collectors.toList());
+
+		commitHandler.onCommit(message.toString(), filePaths);
 	}
 
 	/**

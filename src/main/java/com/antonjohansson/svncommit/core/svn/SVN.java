@@ -60,4 +60,17 @@ public final class SVN
 		String command = COMPARE_COMMAND_PATTERN.replace("%F", fileName);
 		Bash.execute(directory, command);
 	}
+
+	/**
+	 * Commits the given file paths with given message.
+	 *
+	 * @param message The message to use in the commit.
+	 * @param filePaths The path of the files to commit.
+	 */
+	public static void commit(String message, Collection<String> filePaths)
+	{
+		System.out.println("Committing:");
+		System.out.println(message);
+		System.out.println(filePaths);
+	}
 }

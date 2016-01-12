@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * Provides utility for executing bash commands.
@@ -71,6 +72,38 @@ public final class Bash
 		{
 			Process process = execute(directory, scriptFile);
 			return function.apply(process.getInputStream());
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Could not execute temporary bash script", e);
+		}
+	}
+
+	/**
+	 * Executes given command lines in given directory, and pipes the output
+	 * to the given {@code onData} consumer.
+	 *
+	 * @param onData The consumer that will accept output from the process stream.
+	 * @param onComplete The task to execute when the process is complete.
+	 * @param directory The directory to execute command lines within.
+	 * @param commandLines The command lines to execute.
+	 */
+	public static void executeAndPipeOutput(Consumer<String> onData, Runnable onComplete, File directory, String... commandLines)
+	{
+		File scriptFile = getTemporaryScriptFile(asList(commandLines));
+
+		try
+		{
+			Process process = execute(directory, scriptFile);
+			InputStream stream = process.getInputStream();
+			while (stream.available() > 0 || process.isAlive())
+			{
+				byte[] buffer = new byte[1024];
+				stream.read(buffer);
+				String output = new String(buffer);
+				onData.accept(output);
+			}
+			onComplete.run();
 		}
 		catch (IOException e)
 		{

@@ -16,6 +16,7 @@
 package com.antonjohansson.svncommit;
 
 import com.antonjohansson.svncommit.application.commit.CommitApplication;
+import com.antonjohansson.svncommit.application.commit.UpdateApplication;
 
 import static javafx.application.Application.launch;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
@@ -28,6 +29,9 @@ import static org.apache.commons.lang3.ArrayUtils.remove;
  */
 public class EntryPoint
 {
+	/**
+	 * Application main entry-point.
+	 */
 	public static void main(String[] arguments)
 	{
 		if (isEmpty(arguments))
@@ -42,6 +46,10 @@ public class EntryPoint
 		{
 			case "commit":
 				launch(CommitApplication.class, innerArguments);
+				break;
+
+			case "update":
+				launch(UpdateApplication.class, innerArguments);
 				break;
 
 			default:

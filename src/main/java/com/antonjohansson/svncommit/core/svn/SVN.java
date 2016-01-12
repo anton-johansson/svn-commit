@@ -23,6 +23,7 @@ import static org.apache.commons.io.IOUtils.readLines;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * Provides utility methods for working with SVN.
@@ -59,6 +60,18 @@ public final class SVN
 	{
 		String command = COMPARE_COMMAND_PATTERN.replace("%F", fileName);
 		Bash.execute(directory, command);
+	}
+
+	/**
+	 * Performs an SVN update on the given path.
+	 *
+	 * @param path The path to perform SVN update on.
+	 * @param onData The consumer that will accept log output.
+	 * @param onComplete The task to run when the update is complete.
+	 */
+	public static void update(File path, Consumer<String> onData, Runnable onComplete)
+	{
+		Bash.executeAndPipeOutput(onData, onComplete, path, "svn update");
 	}
 
 	/**

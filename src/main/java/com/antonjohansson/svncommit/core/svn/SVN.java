@@ -39,12 +39,12 @@ public final class SVN
 	/**
 	 * Gets a collection of all modified files.
 	 *
-	 * @param directory The directory to get modified files from.
+	 * @param path The directory to get modified files from.
 	 * @return Returns the collection of modified files.
 	 */
-	public static Collection<SvnItem> getModifiedItems(File directory)
+	public static Collection<SvnItem> getModifiedItems(File path)
 	{
-		return Bash.execute(s -> readLines(s), directory, "svn status")
+		return Bash.execute(s -> readLines(s), path, "svn status")
 			.stream()
 			.map(Converter::convertFile)
 			.collect(toList());

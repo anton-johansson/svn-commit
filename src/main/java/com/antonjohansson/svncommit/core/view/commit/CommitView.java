@@ -53,14 +53,14 @@ class CommitView extends Pane
 	private final TextArea commitMessageTextArea;
 	private final TextField activityIdTextField;
 
-	CommitView(File directory, ObservableList<SvnItem> items, ICommitHandler commitHandler)
+	CommitView(File path, ObservableList<SvnItem> items, ICommitHandler commitHandler)
 	{
 		this.items = items;
 		this.commitHandler = commitHandler;
 
 		SvnItemTable table = new SvnItemTable();
 		table.setItems(items);
-		table.setEnterHandler(new CompareEnterHandler(directory));
+		table.setEnterHandler(new CompareEnterHandler(path));
 		table.setSpaceHandler(new SwitchDoCommitSpaceHandler());
 		table.prefWidthProperty().bind(widthProperty());
 		table.prefHeightProperty().bind(heightProperty());

@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit.application.commit;
-
-import com.antonjohansson.svncommit.application.framework.AbstractApplication;
-import com.antonjohansson.svncommit.core.utils.SvnCommitException;
-import com.antonjohansson.svncommit.core.view.commit.CommitSceneFactory;
-
-import java.io.File;
-
-import javafx.scene.Scene;
+package com.antonjohansson.svncommit.core.utils;
 
 /**
- * Defines the application that handles the commit dialog.
+ * Exception that is thrown when an error occurs in svn-commit.
  *
  * @author Anton Johansson
  */
-public class CommitApplication extends AbstractApplication
+public class SvnCommitException extends Exception
 {
-	/** {@inheritDoc} */
-	@Override
-	protected Scene getScene() throws SvnCommitException
+	private static final long serialVersionUID = 6207615471810108158L;
+
+	public SvnCommitException(String message)
 	{
-		File directory = getDirectory();
-		return CommitSceneFactory.create(directory);
+		super(message);
 	}
 }

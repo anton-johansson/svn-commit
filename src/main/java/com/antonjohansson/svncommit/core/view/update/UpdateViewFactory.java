@@ -38,7 +38,7 @@ public class UpdateViewFactory
 	 * @param directory The directory where the update command should be executed.
 	 * @return Returns a {@link Pane}.
 	 */
-	public static Pane create(File path)
+	public static Pane create(File directory)
 	{
 		UpdateView view = new UpdateView();
 
@@ -55,7 +55,7 @@ public class UpdateViewFactory
 		stackPane.getChildren().add(view);
 		stackPane.getChildren().add(anchor);
 
-		SVN.update(path, log -> view.append(log), () -> pane.setVisible(true));
+		SVN.update(directory, log -> view.append(log), () -> pane.setVisible(true));
 		return stackPane;
 	}
 }

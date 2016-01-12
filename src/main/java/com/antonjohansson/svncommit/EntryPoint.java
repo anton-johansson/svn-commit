@@ -16,7 +16,7 @@
 package com.antonjohansson.svncommit;
 
 import com.antonjohansson.svncommit.application.commit.CommitApplication;
-import com.antonjohansson.svncommit.application.commit.UpdateApplication;
+import com.antonjohansson.svncommit.application.update.UpdateApplication;
 
 import static javafx.application.Application.launch;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;

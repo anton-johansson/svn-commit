@@ -45,10 +45,12 @@ public class UpdateViewFactory
 		HBox pane = new HBox();
 		pane.getChildren().add(new ImageView("success.png"));
 		pane.setVisible(false);
+		pane.setMouseTransparent(true);
 
 		AnchorPane anchor = new AnchorPane();
 		anchor.getChildren().add(pane);
-		AnchorPane.setRightAnchor(pane, 12.);
+		anchor.setMouseTransparent(true);
+		AnchorPane.setRightAnchor(pane, 28.);
 		AnchorPane.setBottomAnchor(pane, 10.);
 
 		StackPane stackPane = new StackPane();

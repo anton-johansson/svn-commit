@@ -46,7 +46,6 @@ public class UpdateView extends Pane
 	 */
 	void append(String data)
 	{
-		String text = log.getText().concat(data);
-		log.setText(text);
+		log.appendText(data);
 	}
 }

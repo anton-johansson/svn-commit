@@ -1,0 +1,7 @@
+Package: [[artifactId]]
+Version: [[version]]
+Section: misc
+Priority: optional
+Architecture: all
+Description: [[description]]
+Maintainer: Anton Johansson <antoon.johansson@gmail.com>

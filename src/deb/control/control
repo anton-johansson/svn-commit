@@ -5,3 +5,4 @@ Priority: optional
 Architecture: all
 Description: [[description]]
 Maintainer: Anton Johansson <antoon.johansson@gmail.com>
+Depends: default-jre | java8-runtime | subversion

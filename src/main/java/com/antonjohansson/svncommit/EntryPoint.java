@@ -21,6 +21,7 @@ import com.antonjohansson.svncommit.application.update.UpdateApplication;
 import static javafx.application.Application.launch;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 import static org.apache.commons.lang3.ArrayUtils.remove;
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 /**
  * Contains the applications main entry-point.
@@ -52,9 +53,21 @@ public class EntryPoint
 				launch(UpdateApplication.class, innerArguments);
 				break;
 
+			case "version":
+			case "-version":
+			case "--version":
+				printVersion();
+				break;
+
 			default:
 				System.err.println("Invalid usage");
 				System.exit(1);
 		}
+	}
+
+	private static void printVersion()
+	{
+		String version = EntryPoint.class.getPackage().getImplementationVersion();
+		System.out.println(defaultIfBlank(version, "Development"));
 	}
 }

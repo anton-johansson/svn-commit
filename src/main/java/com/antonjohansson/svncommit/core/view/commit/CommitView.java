@@ -48,6 +48,7 @@ class CommitView extends Pane
 	private static final int COMMIT_PANE_WIDTH = 100;
 	private static final int PADDING = 4;
 
+	private final File path;
 	private final Collection<SvnItem> items;
 	private final ICommitHandler commitHandler;
 	private final TextArea commitMessageTextArea;
@@ -55,6 +56,7 @@ class CommitView extends Pane
 
 	CommitView(File path, ObservableList<SvnItem> items, ICommitHandler commitHandler)
 	{
+		this.path = path;
 		this.items = items;
 		this.commitHandler = commitHandler;
 
@@ -111,7 +113,7 @@ class CommitView extends Pane
 			.map(s -> s.getFileName())
 			.collect(Collectors.toList());
 
-		commitHandler.onCommit(message.toString(), filePaths);
+		commitHandler.onCommit(path, message.toString(), filePaths);
 	}
 
 	/**

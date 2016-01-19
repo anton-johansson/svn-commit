@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.core.utils;
 
+import java.io.File;
 import java.util.Collection;
 
 /**
@@ -28,8 +29,9 @@ public interface ICommitHandler
 	/**
 	 * Called when the application should commit to SVN.
 	 *
+	 * @param directory The directory which the files to commit are contained in.
 	 * @param message The message to use.
 	 * @param filePaths The collection of file paths to commit.
 	 */
-	void onCommit(String message, Collection<String> filePaths);
+	void onCommit(File directory, String message, Collection<String> filePaths);
 }

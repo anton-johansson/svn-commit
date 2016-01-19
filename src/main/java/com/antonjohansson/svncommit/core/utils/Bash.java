@@ -23,6 +23,7 @@ import static org.apache.commons.io.FileUtils.writeStringToFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Consumer;
 
@@ -133,19 +134,32 @@ public final class Bash
 	 */
 	private static File getTemporaryScriptFile(Collection<String> commandLines)
 	{
+		Collection<String> lines = new ArrayList<>();
+		lines.add("#!/bin/bash");
+		lines.addAll(commandLines);
+		return getTemporaryFile(lines, "temporary-script");
+	}
+
+	/**
+	 * Creates a temporary file with the given lines.
+	 *
+	 * @param lines The lines to add to the file.
+	 * @return Returns the {@link File}.
+	 */
+	public static File getTemporaryFile(Collection<String> lines, String prefix)
+	{
 		try
 		{
-			File temporaryFile = createTempFile("svn-commit-temporary-script", "tmp");
-			writeStringToFile(temporaryFile, "#!/bin/bash".concat(lineSeparator()), true);
-			for (String commandLine : commandLines)
+			File temporaryFile = createTempFile("svn-commit-" + prefix + "-", ".tmp");
+			for (String line : lines)
 			{
-				writeStringToFile(temporaryFile, commandLine.concat(lineSeparator()), true);
+				writeStringToFile(temporaryFile, line.concat(lineSeparator()), true);
 			}
 			return temporaryFile;
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException("Could not create temporary bash script", e);
+			throw new RuntimeException("Could not create temporary file", e);
 		}
 	}
 }

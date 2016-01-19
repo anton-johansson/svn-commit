@@ -18,6 +18,7 @@ package com.antonjohansson.svncommit.core.svn;
 import com.antonjohansson.svncommit.core.domain.SvnItem;
 import com.antonjohansson.svncommit.core.utils.Bash;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.io.IOUtils.readLines;
 
@@ -77,13 +78,21 @@ public final class SVN
 	/**
 	 * Commits the given file paths with given message.
 	 *
+	 * @param directory The directory which the files to commit are contained in.
 	 * @param message The message to use in the commit.
 	 * @param filePaths The path of the files to commit.
 	 */
-	public static void commit(String message, Collection<String> filePaths)
+	public static void commit(File directory, String message, Collection<String> filePaths)
 	{
-		System.out.println("Committing:");
-		System.out.println(message);
-		System.out.println(filePaths);
+		File temporaryFile = Bash.getTemporaryFile(asList(message), "commit-message");
+
+		StringBuilder command = new StringBuilder("svn commit")
+			.append(" --file '")
+			.append(temporaryFile.getAbsolutePath())
+			.append("'");
+
+		filePaths.forEach(c -> command.append(" '").append(c).append("'"));
+
+		Bash.execute(directory, command.toString());
 	}
 }

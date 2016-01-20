@@ -16,14 +16,11 @@
 package com.antonjohansson.svncommit.core.view.update;
 
 import com.antonjohansson.svncommit.core.svn.SVN;
+import com.antonjohansson.svncommit.core.view.common.ConsoleView;
 
 import java.io.File;
 
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 
 /**
  * Factory that it used to create {@link UpdateView} instances.
@@ -40,24 +37,8 @@ public class UpdateViewFactory
 	 */
 	public static Pane create(File directory)
 	{
-		UpdateView view = new UpdateView();
-
-		HBox pane = new HBox();
-		pane.getChildren().add(new ImageView("success.png"));
-		pane.setVisible(false);
-		pane.setMouseTransparent(true);
-
-		AnchorPane anchor = new AnchorPane();
-		anchor.getChildren().add(pane);
-		anchor.setMouseTransparent(true);
-		AnchorPane.setRightAnchor(pane, 28.);
-		AnchorPane.setBottomAnchor(pane, 10.);
-
-		StackPane stackPane = new StackPane();
-		stackPane.getChildren().add(view);
-		stackPane.getChildren().add(anchor);
-
-		SVN.update(directory, log -> view.append(log), () -> pane.setVisible(true));
-		return stackPane;
+		ConsoleView view = new ConsoleView();
+		SVN.update(directory, view::append, () -> view.setIcon("success"));
+		return view;
 	}
 }

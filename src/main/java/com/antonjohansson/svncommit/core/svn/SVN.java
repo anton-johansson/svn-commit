@@ -72,7 +72,7 @@ public final class SVN
 	 */
 	public static void update(File path, Consumer<String> onData, Runnable onComplete)
 	{
-		Bash.executeAndPipeOutput(onData, onComplete, path, "svn update");
+		Bash.executeAndPipeOutput(onData, onData, onComplete, path, "svn update");
 	}
 
 	/**
@@ -81,8 +81,11 @@ public final class SVN
 	 * @param directory The directory which the files to commit are contained in.
 	 * @param message The message to use in the commit.
 	 * @param filePaths The path of the files to commit.
+	 * @param onData The consumer that will accept log output.
+	 * @param onComplete The task to run when the update is complete.
 	 */
-	public static void commit(File directory, String message, Collection<String> filePaths)
+	public static void commit(File directory, String message, Collection<String> filePaths,
+			Consumer<String> onData, Consumer<String> onError, Runnable onComplete)
 	{
 		File temporaryFile = Bash.getTemporaryFile(asList(message), "commit-message");
 
@@ -93,6 +96,6 @@ public final class SVN
 
 		filePaths.forEach(c -> command.append(" '").append(c).append("'"));
 
-		Bash.execute(directory, command.toString());
+		Bash.executeAndPipeOutput(onData, onError, onComplete, directory, command.toString());
 	}
 }

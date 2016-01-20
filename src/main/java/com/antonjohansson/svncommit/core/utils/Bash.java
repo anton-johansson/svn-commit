@@ -89,20 +89,25 @@ public final class Bash
 	 * @param directory The directory to execute command lines within.
 	 * @param commandLines The command lines to execute.
 	 */
-	public static void executeAndPipeOutput(Consumer<String> onData, Runnable onComplete, File directory, String... commandLines)
+	public static void executeAndPipeOutput(Consumer<String> onData, Consumer<String> onError, Runnable onComplete, File directory, String... commandLines)
 	{
 		File scriptFile = getTemporaryScriptFile(asList(commandLines));
 
 		try
 		{
 			Process process = execute(directory, scriptFile);
-			InputStream stream = process.getInputStream();
-			while (stream.available() > 0 || process.isAlive())
+			InputStream logStream = process.getInputStream();
+			InputStream errorStream = process.getErrorStream();
+			while (isAvailable(process, logStream, errorStream))
 			{
-				byte[] buffer = new byte[1024];
-				stream.read(buffer);
-				String output = new String(buffer);
-				onData.accept(output);
+				if (logStream.available() > 0)
+				{
+					accept(onData, logStream);
+				}
+				if (errorStream.available() > 0)
+				{
+					accept(onError, errorStream);
+				}
 			}
 			onComplete.run();
 		}
@@ -110,6 +115,21 @@ public final class Bash
 		{
 			throw new RuntimeException("Could not execute temporary bash script", e);
 		}
+	}
+
+	private static boolean isAvailable(Process process, InputStream logStream, InputStream errorStream) throws IOException
+	{
+		return logStream.available() > 0
+			|| errorStream.available() > 0
+			|| process.isAlive();
+	}
+
+	private static void accept(Consumer<String> onData, InputStream logStream) throws IOException
+	{
+		byte[] buffer = new byte[1024];
+		logStream.read(buffer);
+		String output = new String(buffer);
+		onData.accept(output);
 	}
 
 	/**

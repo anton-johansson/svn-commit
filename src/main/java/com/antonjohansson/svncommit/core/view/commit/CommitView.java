@@ -160,7 +160,9 @@ class CommitView extends Pane
 		{
 			boolean allMarked = items.stream().allMatch(i -> i.isDoCommit());
 			boolean doCommit = !allMarked;
-			items.forEach(i -> i.setDoCommit(doCommit));
+			items.stream()
+				.filter(s -> s.getStatus().isDoCommitByDefault())
+				.forEach(i -> i.setDoCommit(doCommit));
 		}
 	}
 }

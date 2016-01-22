@@ -17,16 +17,23 @@ package com.antonjohansson.svncommit2.core.view;
 
 import javafx.scene.Parent;
 
+/**
+ * Abstract skeleton for view implementations.
+ *
+ * @author Anton Johansson
+ */
 public abstract class AbstractView implements View
 {
 	private Parent parent;
 
+	/** {@inheritDoc} */
 	@Override
 	public final Parent getParent()
 	{
 		return parent;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public final void setParent(Parent parent)
 	{

@@ -24,6 +24,7 @@ import com.antonjohansson.svncommit2.core.ioc.AbstractApplicationModule;
  */
 public class ViewModule extends AbstractApplicationModule
 {
+	/** {@inheritDoc} */
 	@Override
 	protected void configure()
 	{

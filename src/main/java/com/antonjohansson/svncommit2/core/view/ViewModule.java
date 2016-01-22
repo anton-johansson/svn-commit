@@ -17,6 +17,11 @@ package com.antonjohansson.svncommit2.core.view;
 
 import com.antonjohansson.svncommit2.core.ioc.AbstractApplicationModule;
 
+/**
+ * Contains common view bindings.
+ *
+ * @author Anton Johansson
+ */
 public class ViewModule extends AbstractApplicationModule
 {
 	@Override

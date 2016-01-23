@@ -35,6 +35,7 @@ import com.google.inject.Inject;
 class CommitController extends AbstractController<LoadingView>
 {
 	private final CommitView commitView;
+	private final LoadingView loadingView;
 	private final Subversion subversion;
 
 	@Inject
@@ -42,6 +43,7 @@ class CommitController extends AbstractController<LoadingView>
 	{
 		super(loadingView);
 		this.commitView = commitView;
+		this.loadingView = loadingView;
 		this.subversion = subversion;
 	}
 
@@ -57,23 +59,23 @@ class CommitController extends AbstractController<LoadingView>
 			}
 		});
 
-		view.setContent(commitView);
+		loadingView.setContent(commitView);
 		refresh();
 	}
 
 	private synchronized void refresh()
 	{
-		if (view.isLoading())
+		if (loadingView.isLoading())
 		{
 			return;
 		}
 
-		view.setLoading(true);
+		loadingView.setLoading(true);
 		Runnable loader = () ->
 		{
 			Collection<ModifiedItem> items = subversion.getModifiedItems();
 			commitView.setItems(items);
-			view.setLoading(false);
+			loadingView.setLoading(false);
 		};
 		new Thread(loader).start();
 	}

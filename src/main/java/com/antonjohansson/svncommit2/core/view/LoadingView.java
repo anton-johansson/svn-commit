@@ -16,6 +16,7 @@
 package com.antonjohansson.svncommit2.core.view;
 
 import static javafx.application.Platform.runLater;
+import static javafx.scene.control.ProgressIndicator.INDETERMINATE_PROGRESS;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -39,11 +40,7 @@ public class LoadingView extends AbstractView
 	 */
 	public void setContent(View view)
 	{
-		runLater(() ->
-		{
-			contentPane.getChildren().clear();
-			contentPane.getChildren().add(view.getParent());
-		});
+		runLater(() -> contentPane.getChildren().setAll(view.getParent()));
 	}
 
 	/**
@@ -53,7 +50,21 @@ public class LoadingView extends AbstractView
 	 */
 	public void setLoading(boolean loading)
 	{
-		progressPane.setVisible(loading);
-		progressBar.setProgress(0);
+		runLater(() ->
+		{
+			progressPane.setVisible(loading);
+			progressBar.setProgress(0);
+			progressBar.setProgress(INDETERMINATE_PROGRESS);
+		});
+	}
+
+	/**
+	 * Gets whether or not the view is loading.
+	 *
+	 * @return Returns {@code true} if the view is loading.
+	 */
+	public boolean isLoading()
+	{
+		return progressPane.isVisible();
 	}
 }

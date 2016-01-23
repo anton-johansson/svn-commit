@@ -63,6 +63,11 @@ class CommitController extends AbstractController<LoadingView>
 
 	private synchronized void refresh()
 	{
+		if (view.isLoading())
+		{
+			return;
+		}
+
 		view.setLoading(true);
 		Runnable loader = () ->
 		{

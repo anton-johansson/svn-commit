@@ -15,7 +15,7 @@
  */
 package com.antonjohansson.svncommit2.core.utils;
 
-import com.antonjohansson.svncommit.core.domain.SvnItem;
+import com.antonjohansson.svncommit2.core.domain.ModifiedItem;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -34,7 +34,7 @@ public interface Subversion
 	 *
 	 * @return Returns the collection of modified files.
 	 */
-	Collection<SvnItem> getModifiedItems();
+	Collection<ModifiedItem> getModifiedItems();
 
 	/**
 	 * Brings up the Meld compare tool for the given file.

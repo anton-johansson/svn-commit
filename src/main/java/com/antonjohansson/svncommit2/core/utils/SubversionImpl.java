@@ -15,9 +15,8 @@
  */
 package com.antonjohansson.svncommit2.core.utils;
 
-import com.antonjohansson.svncommit.core.domain.SvnItem;
-import com.antonjohansson.svncommit.core.svn.Converter;
 import com.antonjohansson.svncommit.core.utils.Bash;
+import com.antonjohansson.svncommit2.core.domain.ModifiedItem;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -53,11 +52,11 @@ class SubversionImpl implements Subversion
 
 	/** {@inheritDoc} */
 	@Override
-	public Collection<SvnItem> getModifiedItems()
+	public Collection<ModifiedItem> getModifiedItems()
 	{
 		return shell.execute(s -> readLines(s), "svn status")
 			.stream()
-			.map(Converter::convertFile)
+			.map(ModifiedItem::convertItem)
 			.collect(toList());
 	}
 

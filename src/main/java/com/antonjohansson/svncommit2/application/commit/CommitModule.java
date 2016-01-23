@@ -13,28 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit2;
+package com.antonjohansson.svncommit2.application.commit;
 
-import com.antonjohansson.svncommit2.application.commit.CommitModule;
-import com.antonjohansson.svncommit2.application.update.UpdateModule;
 import com.antonjohansson.svncommit2.core.ioc.AbstractApplicationModule;
-import com.antonjohansson.svncommit2.core.view.ViewModule;
 
 /**
- * The main application IOC module.
+ * Contains IOC bindings for the commit application.
  *
  * @author Anton Johansson
  */
-public class ApplicationModule extends AbstractApplicationModule
+public class CommitModule extends AbstractApplicationModule
 {
 	@Override
 	protected void configure()
 	{
-		// Core
-		install(ViewModule::new);
-
-		// Application
-		install(CommitModule::new);
-		install(UpdateModule::new);
+		controller("commit", CommitController.class);
+		view(CommitView.class);
 	}
 }

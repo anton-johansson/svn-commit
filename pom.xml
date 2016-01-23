@@ -105,7 +105,11 @@
 					<excludes>
 						<exclude>README.md</exclude>
 						<exclude>LICENSE</exclude>
+						<exclude>src/deb/**</exclude>
 					</excludes>
+					<mapping>
+						<fxml>XML_STYLE</fxml>
+					</mapping>
 				</configuration>
 				<executions>
 					<execution>

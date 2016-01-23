@@ -29,5 +29,6 @@ public class ViewModule extends AbstractApplicationModule
 	protected void configure()
 	{
 		view(ConsoleView.class);
+		view(LoadingView.class);
 	}
 }

@@ -19,6 +19,9 @@ import com.antonjohansson.svncommit2.core.controller.AbstractController;
 import com.antonjohansson.svncommit2.core.controller.Controller;
 import com.antonjohansson.svncommit2.core.domain.ModifiedItem;
 import com.antonjohansson.svncommit2.core.utils.Subversion;
+import com.antonjohansson.svncommit2.core.view.LoadingView;
+
+import static javafx.scene.input.KeyCode.F5;
 
 import java.util.Collection;
 
@@ -29,14 +32,16 @@ import com.google.inject.Inject;
  *
  * @author Anton Johansson
  */
-class CommitController extends AbstractController<CommitView>
+class CommitController extends AbstractController<LoadingView>
 {
+	private final CommitView commitView;
 	private final Subversion subversion;
 
 	@Inject
-	CommitController(CommitView view, Subversion subversion)
+	CommitController(CommitView commitView, LoadingView loadingView, Subversion subversion)
 	{
-		super(view);
+		super(loadingView);
+		this.commitView = commitView;
 		this.subversion = subversion;
 	}
 
@@ -44,7 +49,27 @@ class CommitController extends AbstractController<CommitView>
 	@Override
 	public void initialize()
 	{
-		Collection<ModifiedItem> items = subversion.getModifiedItems();
-		view.setItems(items);
+		commitView.getParent().setOnKeyPressed(e ->
+		{
+			if (F5.equals(e.getCode()))
+			{
+				refresh();
+			}
+		});
+
+		view.setContent(commitView);
+		refresh();
+	}
+
+	private synchronized void refresh()
+	{
+		view.setLoading(true);
+		Runnable loader = () ->
+		{
+			Collection<ModifiedItem> items = subversion.getModifiedItems();
+			commitView.setItems(items);
+			view.setLoading(false);
+		};
+		new Thread(loader).start();
 	}
 }

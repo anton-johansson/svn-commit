@@ -1,1 +1,1 @@
-# svn-commit [![Build Status](https://travis-ci.org/anton-johansson/svn-commit.svg)](https://travis-ci.org/anton-johansson/svn-commit)
+# svn-commit [![Build Status](https://travis-ci.org/anton-johansson/svn-commit.svg)](https://travis-ci.org/anton-johansson/svn-commit) [![Coverage Status](https://coveralls.io/repos/anton-johansson/svn-commit/badge.svg)](https://coveralls.io/github/anton-johansson/svn-commit)

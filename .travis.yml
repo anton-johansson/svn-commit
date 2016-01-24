@@ -5,3 +5,6 @@ jdk:
 # Make sure we have a new enough JDK, see https://github.com/travis-ci/travis-ci/issues/3259
 sudo: required
 dist: trusty
+
+after_success:
+  - mvn clean cobertura:cobertura coveralls:report

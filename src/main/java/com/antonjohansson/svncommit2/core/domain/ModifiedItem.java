@@ -17,9 +17,6 @@ package com.antonjohansson.svncommit2.core.domain;
 
 import static com.antonjohansson.svncommit2.core.domain.DbUpdateLocation.NONE;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,8 +34,6 @@ import javafx.beans.property.StringProperty;
  */
 public class ModifiedItem
 {
-	private static final Pattern PATTERN = Pattern.compile("^(M|A|D|\\?|!)\\s*(.*)$");
-
 	private final BooleanProperty doCommitProperty = new SimpleBooleanProperty();
 	private final Property<FileStatus> statusProperty = new SimpleObjectProperty<>();
 	private final StringProperty fileNameProperty = new SimpleStringProperty();
@@ -128,33 +123,5 @@ public class ModifiedItem
 	{
 		String extension = FilenameUtils.getExtension(fileNameProperty.getValue());
 		return StringUtils.equalsIgnoreCase(extension, "SQL");
-	}
-
-
-	/**
-	 * Converts given status line to an {@link ModifiedItem}.
-	 *
-	 * @param statusLine The status line to convert.
-	 * @return Returns the converted {@link ModifiedItem}.
-	 */
-	public static ModifiedItem convertItem(String statusLine)
-	{
-		Matcher matcher = PATTERN.matcher(statusLine);
-
-		if (!matcher.matches())
-		{
-			throw new RuntimeException("File did not match: " + statusLine);
-		}
-
-		String status = matcher.group(1);
-		if (status.length() != 1)
-		{
-			throw new RuntimeException("status must be one character");
-		}
-
-		String fileName = matcher.group(2);
-		FileStatus fileStatus = FileStatus.getStatus(status.charAt(0));
-
-		return new ModifiedItem(fileName, fileStatus);
 	}
 }

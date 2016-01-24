@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit.core.svn;
+package com.antonjohansson.svncommit2.core.utils;
 
-import com.antonjohansson.svncommit.core.domain.FileStatus;
-import com.antonjohansson.svncommit.core.domain.SvnItem;
+import com.antonjohansson.svncommit2.core.domain.FileStatus;
+import com.antonjohansson.svncommit2.core.domain.ModifiedItem;
 
-import static com.antonjohansson.svncommit.core.domain.FileStatus.ADDED;
-import static com.antonjohansson.svncommit.core.domain.FileStatus.DELETED;
-import static com.antonjohansson.svncommit.core.domain.FileStatus.MISSING;
-import static com.antonjohansson.svncommit.core.domain.FileStatus.MODIFIED;
-import static com.antonjohansson.svncommit.core.domain.FileStatus.UNVERSIONED;
+import static com.antonjohansson.svncommit2.core.domain.FileStatus.ADDED;
+import static com.antonjohansson.svncommit2.core.domain.FileStatus.DELETED;
+import static com.antonjohansson.svncommit2.core.domain.FileStatus.MISSING;
+import static com.antonjohansson.svncommit2.core.domain.FileStatus.MODIFIED;
+import static com.antonjohansson.svncommit2.core.domain.FileStatus.UNVERSIONED;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -66,7 +66,7 @@ public class ConverterTest extends Assert
 
 	private void assertConversion(char statusCharacter, FileStatus status)
 	{
-		SvnItem item = Converter.convertFile(statusCharacter + "      some/file/path.txt");
+		ModifiedItem item = Converter.modifiedItem(statusCharacter + "      some/file/path.txt");
 
 		assertEquals("some/file/path.txt", item.getFileName());
 		assertEquals(status, item.getStatus());

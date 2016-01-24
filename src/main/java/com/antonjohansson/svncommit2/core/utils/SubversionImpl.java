@@ -55,7 +55,7 @@ class SubversionImpl implements Subversion
 	{
 		return shell.execute(s -> readLines(s), "svn status")
 			.stream()
-			.map(ModifiedItem::convertItem)
+			.map(Converter::modifiedItem)
 			.collect(toList());
 	}
 

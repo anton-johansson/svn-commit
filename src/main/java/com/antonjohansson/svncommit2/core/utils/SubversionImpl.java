@@ -15,7 +15,6 @@
  */
 package com.antonjohansson.svncommit2.core.utils;
 
-import com.antonjohansson.svncommit.core.utils.Bash;
 import com.antonjohansson.svncommit2.core.domain.ModifiedItem;
 
 import static java.util.Arrays.asList;
@@ -70,16 +69,16 @@ class SubversionImpl implements Subversion
 
 	/** {@inheritDoc} */
 	@Override
-	public void update(Consumer<String> onData, Runnable onComplete)
+	public void update(Consumer<String> onData, Consumer<Boolean> onComplete)
 	{
 		shell.executeAndPipeOutput(onData, onData, onComplete, "svn update");
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<String> onError, Runnable onComplete)
+	public void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<String> onError, Consumer<Boolean> onComplete)
 	{
-		File temporaryFile = Bash.getTemporaryFile(asList(message), "commit-message");
+		File temporaryFile = shell.getTemporaryFile(asList(message), "commit-message");
 
 		StringBuilder command = new StringBuilder("svn commit")
 			.append(" --file '")

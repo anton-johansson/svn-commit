@@ -49,7 +49,7 @@ public interface Subversion
 	 * @param onData The consumer that will accept log output.
 	 * @param onComplete The task to run when the update is complete.
 	 */
-	void update(Consumer<String> onData, Runnable onComplete);
+	void update(Consumer<String> onData, Consumer<Boolean> onComplete);
 
 	/**
 	 * Commits the given file paths with given message.
@@ -60,5 +60,5 @@ public interface Subversion
 	 * @param onError The consumer that will accept error output.
 	 * @param onComplete The task to run when the update is complete.
 	 */
-	void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<String> onError, Runnable onComplete);
+	void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<String> onError, Consumer<Boolean> onComplete);
 }

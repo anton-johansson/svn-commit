@@ -86,7 +86,7 @@ class Bash implements Shell
 
 	/** {@inheritDoc} */
 	@Override
-	public void executeAndPipeOutput(Consumer<String> onData, Consumer<String> onError, Runnable onComplete, String... commandLines)
+	public void executeAndPipeOutput(Consumer<String> onData, Consumer<String> onError, Consumer<Boolean> onComplete, String... commandLines)
 	{
 		File scriptFile = getTemporaryScriptFile(asList(commandLines));
 
@@ -106,7 +106,8 @@ class Bash implements Shell
 					accept(onError, errorStream);
 				}
 			}
-			onComplete.run();
+			int exitValue = process.exitValue();
+			onComplete.accept(exitValue == 0);
 		}
 		catch (IOException e)
 		{

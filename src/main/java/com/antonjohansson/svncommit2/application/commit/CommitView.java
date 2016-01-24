@@ -21,6 +21,7 @@ import com.antonjohansson.svncommit2.core.domain.ModifiedItem;
 import com.antonjohansson.svncommit2.core.view.AbstractView;
 import com.antonjohansson.svncommit2.core.view.View;
 
+import static java.lang.System.lineSeparator;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
@@ -29,6 +30,7 @@ import static javafx.scene.paint.Color.LIGHTGRAY;
 import java.net.URL;
 import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -37,6 +39,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.util.StringConverter;
@@ -56,7 +59,12 @@ public class CommitView extends AbstractView implements Initializable
 	private final ObservableList<ModifiedItem> items;
 	@FXML private TableView<ModifiedItem> tableView;
 	@FXML private TextArea commitMessage;
+	@FXML private TextField activityID;
+	private Consumer<String> commitHandler;
 
+	/**
+	 * Constructs a new {@link CommitView}.
+	 */
 	public CommitView()
 	{
 		items = observableArrayList();
@@ -70,6 +78,16 @@ public class CommitView extends AbstractView implements Initializable
 	}
 
 	/**
+	 * Sets the commit handler.
+	 *
+	 * @param commitHandler The handler.
+	 */
+	public void setCommitHandler(Consumer<String> commitHandler)
+	{
+		this.commitHandler = commitHandler;
+	}
+
+	/**
 	 * Sets the modified items in the commit view.
 	 *
 	 * @param items The items to set.
@@ -77,6 +95,24 @@ public class CommitView extends AbstractView implements Initializable
 	public void setItems(Collection<ModifiedItem> items)
 	{
 		runLater(() -> this.items.setAll(items));
+	}
+
+	/**
+	 * Occurs when the 'Commit' button is pressed.
+	 */
+	@FXML
+	private void onCommit()
+	{
+		StringBuilder message = new StringBuilder();
+		if (!activityID.getText().isEmpty())
+		{
+			message.append("Task: ")
+				.append(activityID.getText().trim())
+				.append(lineSeparator());
+		}
+		message.append(commitMessage.getText());
+
+		commitHandler.accept(message.toString());
 	}
 
 	private void initializeTableView()

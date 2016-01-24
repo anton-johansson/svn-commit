@@ -45,7 +45,7 @@ class UpdateController extends AbstractController<ConsoleView>
 	public void initialize()
 	{
 		Consumer<String> onData = output -> view.append(output);
-		Runnable onComplete = () -> view.showIcon("success");
+		Consumer<Boolean> onComplete = success -> view.showIcon(success ? "success" : "failure");
 
 		subversion.update(onData, onComplete);
 	}

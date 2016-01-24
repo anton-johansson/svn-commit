@@ -34,8 +34,8 @@
 				<padding>
 					<Insets left="5" top="5" right="5" bottom="5" />
 				</padding>
-				<TextField promptText="Activity ID" />
-				<Button text="Commit" prefWidth="10000000" />
+				<TextField promptText="Activity ID" fx:id="activityID" />
+				<Button text="Commit" prefWidth="10000000" onAction="#onCommit" />
 			</VBox>
 		</HBox>
 	</children>

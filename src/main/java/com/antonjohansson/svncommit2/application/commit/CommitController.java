@@ -19,13 +19,18 @@ import com.antonjohansson.svncommit2.core.controller.AbstractController;
 import com.antonjohansson.svncommit2.core.controller.Controller;
 import com.antonjohansson.svncommit2.core.domain.ModifiedItem;
 import com.antonjohansson.svncommit2.core.utils.Subversion;
+import com.antonjohansson.svncommit2.core.view.ConsoleView;
+import com.antonjohansson.svncommit2.core.view.DialogFactory;
 import com.antonjohansson.svncommit2.core.view.LoadingView;
 
+import static java.util.stream.Collectors.toList;
 import static javafx.scene.input.KeyCode.F5;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * Commit implementation of {@link Controller}.
@@ -36,14 +41,24 @@ class CommitController extends AbstractController<LoadingView>
 {
 	private final CommitView commitView;
 	private final LoadingView loadingView;
+	private final Provider<ConsoleView> consoleViewProvider;
+	private final DialogFactory dialogFactory;
 	private final Subversion subversion;
+	private Collection<ModifiedItem> items;
 
 	@Inject
-	CommitController(CommitView commitView, LoadingView loadingView, Subversion subversion)
+	CommitController(
+			CommitView commitView,
+			LoadingView loadingView,
+			Provider<ConsoleView> consoleViewProvider,
+			DialogFactory dialogFactory,
+			Subversion subversion)
 	{
 		super(loadingView);
 		this.commitView = commitView;
 		this.loadingView = loadingView;
+		this.consoleViewProvider = consoleViewProvider;
+		this.dialogFactory = dialogFactory;
 		this.subversion = subversion;
 	}
 
@@ -51,16 +66,42 @@ class CommitController extends AbstractController<LoadingView>
 	@Override
 	public void initialize()
 	{
-		commitView.getParent().setOnKeyPressed(e ->
+		initializeHandlers();
+
+		loadingView.setContent(commitView);
+		refresh();
+	}
+
+	private void initializeHandlers()
+	{
+		commitView.getParent().setOnKeyPressed(event ->
 		{
-			if (F5.equals(e.getCode()))
+			if (F5.equals(event.getCode()))
 			{
 				refresh();
 			}
 		});
 
-		loadingView.setContent(commitView);
-		refresh();
+		commitView.setCommitHandler(message ->
+		{
+			ConsoleView consoleView = consoleViewProvider.get();
+
+			dialogFactory.create()
+				.view(consoleView)
+				.onClose(event -> refresh())
+				.width(600.0)
+				.height(300.0)
+				.show();
+
+			Consumer<String> onData = data -> consoleView.append(data);
+			Consumer<Boolean> onComplete = success -> consoleView.showIcon(success ? "success" : "failed");
+			Collection<String> paths = items.stream()
+				.filter(s -> s.isDoCommit())
+				.map(s -> s.getFileName())
+				.collect(toList());
+
+			subversion.commit(message, paths, onData, onData, onComplete);
+		});
 	}
 
 	private synchronized void refresh()
@@ -73,7 +114,7 @@ class CommitController extends AbstractController<LoadingView>
 		loadingView.setLoading(true);
 		Runnable loader = () ->
 		{
-			Collection<ModifiedItem> items = subversion.getModifiedItems();
+			items = subversion.getModifiedItems();
 			commitView.setItems(items);
 			loadingView.setLoading(false);
 		};

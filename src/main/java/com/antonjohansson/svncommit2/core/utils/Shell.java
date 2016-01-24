@@ -56,7 +56,7 @@ public interface Shell
 	 * @param onComplete The task to execute when the process is complete.
 	 * @param commandLines The command lines to execute.
 	 */
-	void executeAndPipeOutput(Consumer<String> onData, Consumer<String> onError, Runnable onComplete, String... commandLines);
+	void executeAndPipeOutput(Consumer<String> onData, Consumer<String> onError, Consumer<Boolean> onComplete, String... commandLines);
 
 	/**
 	 * Creates a temporary file with the given lines.

@@ -16,9 +16,13 @@
 package com.antonjohansson.svncommit2.core.domain;
 
 import static com.antonjohansson.svncommit2.core.domain.DbUpdateLocation.NONE;
+import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
@@ -123,5 +127,46 @@ public class ModifiedItem
 	{
 		String extension = FilenameUtils.getExtension(fileNameProperty.getValue());
 		return StringUtils.equalsIgnoreCase(extension, "SQL");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public int hashCode()
+	{
+		return new HashCodeBuilder().append(getFileName()).toHashCode();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == this)
+		{
+			return true;
+		}
+		if (!(obj instanceof ModifiedItem))
+		{
+			return false;
+		}
+
+		ModifiedItem that = (ModifiedItem) obj;
+		return new EqualsBuilder()
+			.append(this.isDoCommit(), that.isDoCommit())
+			.append(this.getStatus(), that.getStatus())
+			.append(this.getFileName(), that.getFileName())
+			.append(this.getReplication(), that.getReplication())
+			.isEquals();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toString()
+	{
+		return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
+			.append("doCommit", isDoCommit())
+			.append("status", getStatus())
+			.append("fileName", getFileName())
+			.append("replication", getReplication())
+			.toString();
 	}
 }

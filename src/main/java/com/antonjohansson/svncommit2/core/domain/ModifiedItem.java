@@ -129,6 +129,17 @@ public class ModifiedItem
 		return StringUtils.equalsIgnoreCase(extension, "SQL");
 	}
 
+	/**
+	 * Gets whether or not another modified item has the same path.
+	 *
+	 * @param other The other modified item to check.
+	 * @return Returns {@code true} if the other item has the same path.
+	 */
+	public boolean isSamePath(ModifiedItem other)
+	{
+		return getFileName().equals(other.getFileName());
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public int hashCode()

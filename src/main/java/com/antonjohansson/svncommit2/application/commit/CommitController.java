@@ -23,6 +23,7 @@ import com.antonjohansson.svncommit2.core.view.ConsoleView;
 import com.antonjohansson.svncommit2.core.view.DialogFactory;
 import com.antonjohansson.svncommit2.core.view.LoadingView;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static javafx.scene.input.KeyCode.F5;
 
@@ -44,7 +45,7 @@ class CommitController extends AbstractController<LoadingView>
 	private final Provider<ConsoleView> consoleViewProvider;
 	private final DialogFactory dialogFactory;
 	private final Subversion subversion;
-	private Collection<ModifiedItem> items;
+	private Collection<ModifiedItem> items = emptyList();
 
 	@Inject
 	CommitController(
@@ -114,10 +115,27 @@ class CommitController extends AbstractController<LoadingView>
 		loadingView.setLoading(true);
 		Runnable loader = () ->
 		{
-			items = subversion.getModifiedItems();
+			items = getModifiedItems();
 			commitView.setItems(items);
 			loadingView.setLoading(false);
 		};
 		new Thread(loader).start();
+	}
+
+	private Collection<ModifiedItem> getModifiedItems()
+	{
+		Collection<ModifiedItem> modifiedItems = subversion.getModifiedItems();
+		modifiedItems.stream().forEach(modifiedItem ->
+		{
+			items.stream()
+					.filter(modifiedItem::isSamePath)
+					.findAny()
+					.ifPresent(item ->
+					{
+						modifiedItem.setDoCommit(item.isDoCommit());
+						modifiedItem.setReplication(item.getReplication());
+					});
+		});
+		return modifiedItems;
 	}
 }

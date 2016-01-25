@@ -125,7 +125,7 @@ class CommitController extends AbstractController<LoadingView>
 	private Collection<ModifiedItem> getModifiedItems()
 	{
 		Collection<ModifiedItem> modifiedItems = subversion.getModifiedItems();
-		modifiedItems.stream().forEach(modifiedItem ->
+		for (ModifiedItem modifiedItem : modifiedItems)
 		{
 			items.stream()
 					.filter(modifiedItem::isSamePath)
@@ -135,7 +135,7 @@ class CommitController extends AbstractController<LoadingView>
 						modifiedItem.setDoCommit(item.isDoCommit());
 						modifiedItem.setReplication(item.getReplication());
 					});
-		});
+		}
 		return modifiedItems;
 	}
 }

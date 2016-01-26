@@ -32,7 +32,7 @@
 		</TextArea>
 		<AnchorPane mouseTransparent="true">
 			<children>
-				<ImageView fx:id="icon" AnchorPane.rightAnchor="28.0" AnchorPane.bottomAnchor="26.0" />
+				<ImageView fx:id="icon" AnchorPane.rightAnchor="28.0" AnchorPane.bottomAnchor="26.0" visible="false" />
 			</children>
 		</AnchorPane>
 	</children>

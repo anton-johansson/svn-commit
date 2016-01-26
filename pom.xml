@@ -58,6 +58,19 @@
 		<url>https://travis-ci.org/anton-johansson/svn-commit</url>
 	</ciManagement>
 
+	<repositories>
+		<repository>
+			<id>Sonatype snapshots</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
+
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -99,6 +112,36 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>2.0.2-beta</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.java.jemmy</groupId>
+			<artifactId>JemmyFX</artifactId>
+			<version>0.9.3-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.java.jemmy</groupId>
+			<artifactId>JemmyFXBrowser</artifactId>
+			<version>0.9.3-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.java.jemmy</groupId>
+			<artifactId>Jemmy3Core</artifactId>
+			<version>0.9.3-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.java.jemmy</groupId>
+			<artifactId>Jemmy3AWT</artifactId>
+			<version>0.9.3-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.java.jemmy</groupId>
+			<artifactId>Jemmy3AWTInput</artifactId>
+			<version>0.9.3-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

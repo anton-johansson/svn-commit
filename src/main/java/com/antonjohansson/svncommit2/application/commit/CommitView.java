@@ -31,8 +31,10 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
@@ -42,6 +44,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
 
 /**
@@ -98,6 +101,16 @@ public class CommitView extends AbstractView implements Initializable
 	}
 
 	/**
+	 * Gets the selected items as a stream.
+	 * 
+	 * @return Returns the stream of selected items.
+	 */
+	public Stream<ModifiedItem> selectedItems()
+	{
+		return tableView.getSelectionModel().getSelectedItems().stream();
+	}
+
+	/**
 	 * Occurs when the 'Commit' button is pressed.
 	 */
 	@FXML
@@ -113,6 +126,33 @@ public class CommitView extends AbstractView implements Initializable
 		message.append(commitMessage.getText());
 
 		commitHandler.accept(message.toString());
+	}
+
+	/**
+	 * Sets the key-press event handler.
+	 * 
+	 * @param eventHandler The handler.
+	 */
+	public void setOnKeyPressed(EventHandler<KeyEvent> eventHandler)
+	{
+		getParent().setOnKeyPressed(eventHandler);
+		tableView.setOnKeyPressed(eventHandler);
+	}
+
+	/**
+	 * Sets the mouse double-click event handler.
+	 * 
+	 * @param runnable The runnable to run on double-click.
+	 */
+	public void setOnMouseDoubleClicked(Runnable runnable)
+	{
+		tableView.setOnMouseClicked(event ->
+		{
+			if (event.getClickCount() == 2)
+			{
+				runnable.run();
+			}
+		});
 	}
 
 	private void initializeTableView()

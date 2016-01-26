@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit2.application.commit;
 
+import com.antonjohansson.svncommit.core.view.utils.Alerter;
 import com.antonjohansson.svncommit2.core.controller.AbstractController;
 import com.antonjohansson.svncommit2.core.controller.Controller;
 import com.antonjohansson.svncommit2.core.domain.ModifiedItem;
@@ -25,13 +26,17 @@ import com.antonjohansson.svncommit2.core.view.LoadingView;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
-import static javafx.scene.input.KeyCode.F5;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import javafx.scene.input.KeyCode;
 
 /**
  * Commit implementation of {@link Controller}.
@@ -40,6 +45,7 @@ import com.google.inject.Provider;
  */
 class CommitController extends AbstractController<LoadingView>
 {
+	private final Map<KeyCode, Runnable> keyMappings = keyMappings();
 	private final CommitView commitView;
 	private final LoadingView loadingView;
 	private final Provider<ConsoleView> consoleViewProvider;
@@ -75,14 +81,12 @@ class CommitController extends AbstractController<LoadingView>
 
 	private void initializeHandlers()
 	{
-		commitView.getParent().setOnKeyPressed(event ->
+		commitView.setOnKeyPressed(event ->
 		{
-			if (F5.equals(event.getCode()))
-			{
-				refresh();
-			}
+			Runnable handler = keyMappings.get(event.getCode());
+			Optional.ofNullable(handler).ifPresent(h -> h.run());
 		});
-
+		commitView.setOnMouseDoubleClicked(this::compare);
 		commitView.setCommitHandler(message ->
 		{
 			ConsoleView consoleView = consoleViewProvider.get();
@@ -122,6 +126,30 @@ class CommitController extends AbstractController<LoadingView>
 		new Thread(loader).start();
 	}
 
+	private void compare()
+	{
+		long size = commitView.selectedItems().count();
+		if (size > 5)
+		{
+			Alerter.error("I won't open up that many compare windows!");
+			return;
+		}
+		if (size > 1 && !Alerter.confirm("Do you want to open up %d compare windows?", size))
+		{
+			return;
+		}
+		commitView.selectedItems().forEach(i -> subversion.compare(i.getFileName()));
+	}
+
+	private void changeDoCommit()
+	{
+		boolean allMarked = commitView.selectedItems().allMatch(i -> i.isDoCommit());
+		boolean doCommit = !allMarked;
+		commitView.selectedItems()
+				.filter(s -> s.getStatus().isCommitable())
+				.forEach(i -> i.setDoCommit(doCommit));
+	}
+
 	private Collection<ModifiedItem> getModifiedItems()
 	{
 		Collection<ModifiedItem> modifiedItems = subversion.getModifiedItems();
@@ -137,5 +165,14 @@ class CommitController extends AbstractController<LoadingView>
 					});
 		}
 		return modifiedItems;
+	}
+
+	private Map<KeyCode, Runnable> keyMappings()
+	{
+		Map<KeyCode, Runnable> keyMappings = new HashMap<>();
+		keyMappings.put(KeyCode.F5, this::refresh);
+		keyMappings.put(KeyCode.SPACE, this::changeDoCommit);
+		keyMappings.put(KeyCode.ENTER, this::compare);
+		return keyMappings;
 	}
 }

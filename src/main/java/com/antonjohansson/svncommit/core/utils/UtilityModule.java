@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
+package com.antonjohansson.svncommit.core.utils;
 
-import javafx.application.Application;
+import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 
 /**
- * Contains the applications main entry-point.
+ * Contains IOC bindings for the utilities.
  *
  * @author Anton Johansson
  */
-public class EntryPoint
+public class UtilityModule extends AbstractModule
 {
-	/**
-	 * Application main entry-point.
-	 */
-	public static void main(String[] arguments)
+	/** {@inheritDoc} */
+	@Override
+	protected void configure()
 	{
-		Application.launch(SvnCommitApplication.class, arguments);
+		bind(Subversion.class).to(SubversionImpl.class).in(Singleton.class);
+		bind(Shell.class).to(Bash.class).in(Singleton.class);
 	}
 }

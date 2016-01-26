@@ -13,22 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
+package com.antonjohansson.svncommit.core.view;
 
-import javafx.application.Application;
+import javafx.scene.Parent;
 
-/**
- * Contains the applications main entry-point.
- *
- * @author Anton Johansson
- */
-public class EntryPoint
+public interface View
 {
-	/**
-	 * Application main entry-point.
-	 */
-	public static void main(String[] arguments)
-	{
-		Application.launch(SvnCommitApplication.class, arguments);
-	}
+	Parent getParent();
+
+	void setParent(Parent parent);
 }

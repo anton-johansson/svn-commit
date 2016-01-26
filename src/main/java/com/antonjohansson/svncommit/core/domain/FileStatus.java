@@ -39,23 +39,33 @@ public enum FileStatus
 
 	private final char key;
 	private final String caption;
-	private final boolean doCommitByDefault;
+	private final boolean commitable;
 
-	private FileStatus(char key, String caption, boolean doCommitByDefault)
+	private FileStatus(char key, String caption, boolean commitable)
 	{
 		this.key = key;
 		this.caption = caption;
-		this.doCommitByDefault = doCommitByDefault;
+		this.commitable = commitable;
 	}
 
+	/**
+	 * Gets the caption of this status.
+	 *
+	 * @return Returns the caption.
+	 */
 	public String getCaption()
 	{
 		return caption;
 	}
 
-	public boolean isDoCommitByDefault()
+	/**
+	 * Gets whether or not this status is commitable.
+	 *
+	 * @return Returns {@code true} if this status is commitable.
+	 */
+	public boolean isCommitable()
 	{
-		return doCommitByDefault;
+		return commitable;
 	}
 
 	/**

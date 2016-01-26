@@ -27,28 +27,37 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import com.google.inject.Inject;
+
 /**
- * Provides utility for executing bash commands.
+ * Unix implementation of {@link Shell}.
  *
  * @author Anton Johansson
  */
-public final class Bash
+class Bash implements Shell
 {
-	private Bash() {}
+	private final File path;
 
 	/**
-	 * Executes given command lines in given directory.
+	 * Constructs a new {@link Bash} instance.
 	 *
-	 * @param directory The directory to execute command lines within.
-	 * @param commandLines The command lines to execute.
+	 * @param path The path to execute bash scripts in.
 	 */
-	public static void execute(File directory, String... commandLines)
+	@Inject
+	Bash(File path)
+	{
+		this.path = path;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void execute(String... commandLines)
 	{
 		File scriptFile = getTemporaryScriptFile(asList(commandLines));
 
 		try
 		{
-			execute(directory, scriptFile);
+			execute(path, scriptFile);
 		}
 		catch (IOException e)
 		{
@@ -56,22 +65,15 @@ public final class Bash
 		}
 	}
 
-	/**
-	 * Executes given command lines in given directory, and applies a function
-	 * to the returned input stream and returns the value from that function.
-	 *
-	 * @param function The function to apply to the input stream.
-	 * @param directory The directory to execute command lines within.
-	 * @param commandLines The command lines to execute.
-	 * @return Returns the result of the applied function.
-	 */
-	public static <R> R execute(ThrowingFunction<InputStream, R, IOException> function, File directory, String... commandLines)
+	/** {@inheritDoc} */
+	@Override
+	public <R> R execute(ThrowingFunction<InputStream, R, IOException> function, String... commandLines)
 	{
 		File scriptFile = getTemporaryScriptFile(asList(commandLines));
 
 		try
 		{
-			Process process = execute(directory, scriptFile);
+			Process process = execute(path, scriptFile);
 			return function.apply(process.getInputStream());
 		}
 		catch (IOException e)
@@ -80,22 +82,15 @@ public final class Bash
 		}
 	}
 
-	/**
-	 * Executes given command lines in given directory, and pipes the output
-	 * to the given {@code onData} consumer.
-	 *
-	 * @param onData The consumer that will accept output from the process stream.
-	 * @param onComplete The task to execute when the process is complete.
-	 * @param directory The directory to execute command lines within.
-	 * @param commandLines The command lines to execute.
-	 */
-	public static void executeAndPipeOutput(Consumer<String> onData, Consumer<String> onError, Runnable onComplete, File directory, String... commandLines)
+	/** {@inheritDoc} */
+	@Override
+	public void executeAndPipeOutput(Consumer<String> onData, Consumer<String> onError, Consumer<Boolean> onComplete, String... commandLines)
 	{
 		File scriptFile = getTemporaryScriptFile(asList(commandLines));
 
 		try
 		{
-			Process process = execute(directory, scriptFile);
+			Process process = execute(path, scriptFile);
 			InputStream logStream = process.getInputStream();
 			InputStream errorStream = process.getErrorStream();
 			while (isAvailable(process, logStream, errorStream))
@@ -109,7 +104,8 @@ public final class Bash
 					accept(onError, errorStream);
 				}
 			}
-			onComplete.run();
+			int exitValue = process.exitValue();
+			onComplete.accept(exitValue == 0);
 		}
 		catch (IOException e)
 		{
@@ -117,56 +113,9 @@ public final class Bash
 		}
 	}
 
-	private static boolean isAvailable(Process process, InputStream logStream, InputStream errorStream) throws IOException
-	{
-		return logStream.available() > 0
-			|| errorStream.available() > 0
-			|| process.isAlive();
-	}
-
-	private static void accept(Consumer<String> onData, InputStream logStream) throws IOException
-	{
-		byte[] buffer = new byte[1024];
-		logStream.read(buffer);
-		String output = new String(buffer);
-		onData.accept(output);
-	}
-
-	/**
-	 * Executes given script file in given directory.
-	 *
-	 * @param directory The directory to execute command lines within.
-	 * @param scriptFile The script file to execute.
-	 * @return Returns the process.
-	 */
-	private static Process execute(File directory, File scriptFile) throws IOException
-	{
-		return new ProcessBuilder("bash", scriptFile.getAbsolutePath())
-			.directory(directory)
-			.start();
-	}
-
-	/**
-	 * Creates a temporary bash script with the given command lines.
-	 *
-	 * @param commandLines The command lines to add to the bash script.
-	 * @return Returns the bash script {@link File}.
-	 */
-	private static File getTemporaryScriptFile(Collection<String> commandLines)
-	{
-		Collection<String> lines = new ArrayList<>();
-		lines.add("#!/bin/bash");
-		lines.addAll(commandLines);
-		return getTemporaryFile(lines, "temporary-script");
-	}
-
-	/**
-	 * Creates a temporary file with the given lines.
-	 *
-	 * @param lines The lines to add to the file.
-	 * @return Returns the {@link File}.
-	 */
-	public static File getTemporaryFile(Collection<String> lines, String prefix)
+	/** {@inheritDoc} */
+	@Override
+	public File getTemporaryFile(Collection<String> lines, String prefix)
 	{
 		try
 		{
@@ -181,5 +130,48 @@ public final class Bash
 		{
 			throw new RuntimeException("Could not create temporary file", e);
 		}
+	}
+
+	private boolean isAvailable(Process process, InputStream logStream, InputStream errorStream) throws IOException
+	{
+		return logStream.available() > 0
+			|| errorStream.available() > 0
+			|| process.isAlive();
+	}
+
+	private void accept(Consumer<String> onData, InputStream logStream) throws IOException
+	{
+		byte[] buffer = new byte[1024];
+		logStream.read(buffer);
+		String output = new String(buffer);
+		onData.accept(output);
+	}
+
+	/**
+	 * Executes given script file in given directory.
+	 *
+	 * @param directory The directory to execute command lines within.
+	 * @param scriptFile The script file to execute.
+	 * @return Returns the process.
+	 */
+	private Process execute(File directory, File scriptFile) throws IOException
+	{
+		return new ProcessBuilder("bash", scriptFile.getAbsolutePath())
+			.directory(directory)
+			.start();
+	}
+
+	/**
+	 * Creates a temporary bash script with the given command lines.
+	 *
+	 * @param commandLines The command lines to add to the bash script.
+	 * @return Returns the bash script {@link File}.
+	 */
+	private File getTemporaryScriptFile(Collection<String> commandLines)
+	{
+		Collection<String> lines = new ArrayList<>();
+		lines.add("#!/bin/bash");
+		lines.addAll(commandLines);
+		return getTemporaryFile(lines, "temporary-script");
 	}
 }

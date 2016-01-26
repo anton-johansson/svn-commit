@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
+package com.antonjohansson.svncommit.core.view;
 
-import javafx.application.Application;
+import com.antonjohansson.svncommit.core.ioc.AbstractApplicationModule;
 
 /**
- * Contains the applications main entry-point.
+ * Contains common view bindings.
  *
  * @author Anton Johansson
  */
-public class EntryPoint
+public class ViewModule extends AbstractApplicationModule
 {
-	/**
-	 * Application main entry-point.
-	 */
-	public static void main(String[] arguments)
+	/** {@inheritDoc} */
+	@Override
+	protected void configure()
 	{
-		Application.launch(SvnCommitApplication.class, arguments);
+		view(ConsoleView.class);
+		view(LoadingView.class);
 	}
 }

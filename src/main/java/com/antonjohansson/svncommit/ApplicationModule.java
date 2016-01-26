@@ -15,20 +15,26 @@
  */
 package com.antonjohansson.svncommit;
 
-import javafx.application.Application;
+import com.antonjohansson.svncommit.application.commit.CommitModule;
+import com.antonjohansson.svncommit.application.update.UpdateModule;
+import com.antonjohansson.svncommit.core.ioc.AbstractApplicationModule;
+import com.antonjohansson.svncommit.core.view.ViewModule;
 
 /**
- * Contains the applications main entry-point.
+ * The main application IOC module.
  *
  * @author Anton Johansson
  */
-public class EntryPoint
+public class ApplicationModule extends AbstractApplicationModule
 {
-	/**
-	 * Application main entry-point.
-	 */
-	public static void main(String[] arguments)
+	@Override
+	protected void configure()
 	{
-		Application.launch(SvnCommitApplication.class, arguments);
+		// Core
+		install(ViewModule::new);
+
+		// Application
+		install(CommitModule::new);
+		install(UpdateModule::new);
 	}
 }

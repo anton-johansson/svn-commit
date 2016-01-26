@@ -13,22 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
+package com.antonjohansson.svncommit.core.view;
 
-import javafx.application.Application;
+import javafx.scene.Parent;
 
 /**
- * Contains the applications main entry-point.
+ * Abstract skeleton for view implementations.
  *
  * @author Anton Johansson
  */
-public class EntryPoint
+public abstract class AbstractView implements View
 {
-	/**
-	 * Application main entry-point.
-	 */
-	public static void main(String[] arguments)
+	private Parent parent;
+
+	/** {@inheritDoc} */
+	@Override
+	public final Parent getParent()
 	{
-		Application.launch(SvnCommitApplication.class, arguments);
+		return parent;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public final void setParent(Parent parent)
+	{
+		this.parent = parent;
 	}
 }

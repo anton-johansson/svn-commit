@@ -13,22 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
+package com.antonjohansson.svncommit.core.controller;
 
-import javafx.application.Application;
+import com.antonjohansson.svncommit.core.view.View;
 
 /**
- * Contains the applications main entry-point.
+ * Abstract skeleton for controllers.
  *
  * @author Anton Johansson
  */
-public class EntryPoint
+public abstract class AbstractController<V extends View> implements Controller
 {
+	protected final V view;
+
 	/**
-	 * Application main entry-point.
+	 * Constructs a new {@link AbstractController}.
+	 *
+	 * @param view The view of the controller.
 	 */
-	public static void main(String[] arguments)
+	protected AbstractController(V view)
 	{
-		Application.launch(SvnCommitApplication.class, arguments);
+		this.view = view;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public final View getView()
+	{
+		return view;
 	}
 }

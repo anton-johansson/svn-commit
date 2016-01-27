@@ -15,66 +15,71 @@
  */
 package com.antonjohansson.svncommit.core.view;
 
-import org.jemmy.fx.AppExecutor;
-import org.jemmy.fx.NodeDock;
-import org.jemmy.fx.SceneDock;
-import org.jemmy.fx.control.TextInputControlDock;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static java.lang.System.lineSeparator;
+import static org.hamcrest.Matchers.not;
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.hasText;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
-import javafx.scene.image.ImageView;
+import java.io.IOException;
+import java.net.URL;
+
+import org.junit.Test;
+import org.testfx.framework.junit.ApplicationTest;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * Unit tests of {@link ConsoleView}.
  *
  * @author Anton Johansson
  */
-public class ConsoleViewTest extends Assert
+public class ConsoleViewTest extends ApplicationTest
 {
-	private SceneDock scene;
-	private TextInputControlDock console;
-	private NodeDock icon;
-	private static boolean initialized;
+	private ConsoleView view;
 
-	@Before
-	public void setUp()
+	@Override
+	public void start(Stage stage) throws Exception
 	{
-		if (!initialized)
+		String name = ConsoleView.class.getSimpleName() + ".fxml";
+		URL location = ConsoleView.class.getResource(name);
+		try
 		{
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> Thread.currentThread().interrupt()));
-			AppExecutor.executeNoBlock(TestApp.class);
-			initialized = true;
+			FXMLLoader loader = new FXMLLoader(location);
+			Parent parent = loader.load();
+			view = loader.getController();
+			view.setParent(parent);
+
+			stage.setScene(new Scene(parent));
+			stage.show();
 		}
-		
-		scene = new SceneDock();
-		console = new TextInputControlDock(scene.asParent(), "console");
-		icon = new NodeDock(scene.asParent(), "icon");
-	}
-	
-	private ImageView icon()
-	{
-		return (ImageView) icon.control();
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test
 	public void test_append()
 	{
-		TestApp.view.append("some test string");
+		verifyThat("#console", hasText(""));
 		
-		String actual = console.getText();
-		String expected = "some test string";
+		view.append("some test string" + lineSeparator());
+		verifyThat("#console", hasText("some test string" + lineSeparator()));
 		
-		assertEquals(expected, actual);
+		view.append("another string" + lineSeparator());
+		verifyThat("#console", hasText("some test string" + lineSeparator() + "another string" + lineSeparator()));
 	}
 
 	@Test
 	public void test_showIcon()
 	{
-		assertFalse(icon().isVisible());
+		verifyThat("#icon", not(isVisible()));
 
-		TestApp.view.showIcon("success");
-
-		assertTrue(icon().isVisible());
+		view.showIcon("success");
+		verifyThat("#icon", isVisible());
 	}
 }

@@ -115,33 +115,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.java.jemmy</groupId>
-			<artifactId>JemmyFX</artifactId>
-			<version>0.9.3-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.java.jemmy</groupId>
-			<artifactId>JemmyFXBrowser</artifactId>
-			<version>0.9.3-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.java.jemmy</groupId>
-			<artifactId>Jemmy3Core</artifactId>
-			<version>0.9.3-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.java.jemmy</groupId>
-			<artifactId>Jemmy3AWT</artifactId>
-			<version>0.9.3-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.java.jemmy</groupId>
-			<artifactId>Jemmy3AWTInput</artifactId>
-			<version>0.9.3-SNAPSHOT</version>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-junit</artifactId>
+			<version>4.0.1-alpha</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -8,8 +8,8 @@ dist: trusty
 
 # Enable X Virtual Framebuffer in order to run UI tests
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 
 after_success:
   - mvn clean cobertura:cobertura coveralls:report

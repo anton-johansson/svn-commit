@@ -16,70 +16,55 @@
 package com.antonjohansson.svncommit.core.view;
 
 import static java.lang.System.lineSeparator;
-import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
-import static org.testfx.matcher.base.NodeMatchers.isVisible;
-
-import java.io.IOException;
-import java.net.URL;
 
 import org.junit.Test;
-import org.testfx.framework.junit.ApplicationTest;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 
 /**
  * Unit tests of {@link ConsoleView}.
  *
  * @author Anton Johansson
  */
-public class ConsoleViewTest extends ApplicationTest
+public class ConsoleViewTest extends AbstractViewTest<ConsoleView>
 {
-	private ConsoleView view;
+	private TextArea console;
+	private ImageView icon;
 
 	@Override
-	public void start(Stage stage) throws Exception
+	protected void initNodes()
 	{
-		String name = ConsoleView.class.getSimpleName() + ".fxml";
-		URL location = ConsoleView.class.getResource(name);
-		try
-		{
-			FXMLLoader loader = new FXMLLoader(location);
-			Parent parent = loader.load();
-			view = loader.getController();
-			view.setParent(parent);
-
-			stage.setScene(new Scene(parent));
-			stage.show();
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
+		console = getNode("console");
+		icon = getNode("icon");
 	}
 
 	@Test
 	public void test_append()
 	{
-		verifyThat("#console", hasText(""));
-		
+		verifyThat(console, hasText(""));
+
 		view.append("some test string" + lineSeparator());
-		verifyThat("#console", hasText("some test string" + lineSeparator()));
-		
+		verifyThat(console, hasText("some test string" + lineSeparator()));
+
 		view.append("another string" + lineSeparator());
-		verifyThat("#console", hasText("some test string" + lineSeparator() + "another string" + lineSeparator()));
+		verifyThat(console, hasText("some test string" + lineSeparator() + "another string" + lineSeparator()));
 	}
 
 	@Test
 	public void test_showIcon()
 	{
-		verifyThat("#icon", not(isVisible()));
+		assertFalse(icon.isVisible());
+		assertNull(icon.getImage());
 
 		view.showIcon("success");
-		verifyThat("#icon", isVisible());
+		assertTrue(icon.isVisible());
+		assertNotNull(icon.getImage());
 	}
 }

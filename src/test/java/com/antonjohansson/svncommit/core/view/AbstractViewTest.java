@@ -51,8 +51,12 @@ public abstract class AbstractViewTest<V extends View> extends ApplicationTest
 	@Override
 	public final void start(Stage stage) throws Exception
 	{
+		URL resource = AbstractViewTest.class.getResource("/" + viewClass.getName().replace(".", "/") + ".fxml");
+		System.out.println(resource);
+		
 		String name = viewClass.getSimpleName() + ".fxml";
 		URL location = viewClass.getResource(name);
+		
 		try
 		{
 			FXMLLoader loader = new FXMLLoader(location);

@@ -17,7 +17,6 @@ package com.antonjohansson.svncommit.core.utils;
 
 import com.antonjohansson.svncommit.core.domain.FileStatus;
 import com.antonjohansson.svncommit.core.domain.ModifiedItem;
-import com.antonjohansson.svncommit.core.utils.Converter;
 
 import static com.antonjohansson.svncommit.core.domain.FileStatus.ADDED;
 import static com.antonjohansson.svncommit.core.domain.FileStatus.DELETED;
@@ -35,6 +34,12 @@ import org.junit.Test;
  */
 public class ConverterTest extends Assert
 {
+	@Test(expected = RuntimeException.class)
+	public void test_that_unknown_status_line_causes_exception()
+	{
+		Converter.modifiedItem("some-unknown-line");
+	}
+
 	@Test
 	public void test_that_modified_file_is_converted()
 	{

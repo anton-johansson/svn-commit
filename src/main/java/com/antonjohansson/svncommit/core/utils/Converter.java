@@ -48,11 +48,6 @@ public final class Converter
 		}
 
 		String status = matcher.group(1);
-		if (status.length() != 1)
-		{
-			throw new RuntimeException("status must be one character");
-		}
-
 		String fileName = matcher.group(2);
 		FileStatus fileStatus = FileStatus.getStatus(status.charAt(0));
 

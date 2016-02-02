@@ -66,7 +66,7 @@ public abstract class AbstractApplicationModule extends AbstractModule
 	 */
 	protected <V extends View> void view(Class<V> viewClass)
 	{
-		bind(viewClass).toProvider(new ViewProvider<V>(viewClass));
+		bind(viewClass).toProvider(new ViewProvider<>(viewClass));
 	}
 
 	/**

@@ -16,10 +16,6 @@
 package com.antonjohansson.svncommit.core.utils;
 
 import com.antonjohansson.svncommit.core.domain.ModifiedItem;
-import com.antonjohansson.svncommit.core.utils.Shell;
-import com.antonjohansson.svncommit.core.utils.Subversion;
-import com.antonjohansson.svncommit.core.utils.SubversionImpl;
-import com.antonjohansson.svncommit.core.utils.ThrowingFunction;
 
 import static com.antonjohansson.svncommit.core.domain.FileStatus.ADDED;
 import static com.antonjohansson.svncommit.core.domain.FileStatus.MODIFIED;
@@ -93,7 +89,7 @@ public class SubversionImplTest extends Assert
 		};
 		doAnswer(answer).when(shell).executeAndPipeOutput(any(), any(), any(), eq("svn update"));
 
-		AtomicReference<String> output = new AtomicReference<String>("");
+		AtomicReference<String> output = new AtomicReference<>("");
 		AtomicBoolean success = new AtomicBoolean(false);
 
 		subversion.update(o -> output.set(output.get().concat(o)), s -> success.set(s));
@@ -133,8 +129,8 @@ public class SubversionImplTest extends Assert
 
 		when(shell.getTemporaryFile(asList("some-commit-message"), "commit-message")).thenReturn(new File("/file-with-message"));
 
-		AtomicReference<String> output = new AtomicReference<String>("");
-		AtomicReference<String> error = new AtomicReference<String>("");
+		AtomicReference<String> output = new AtomicReference<>("");
+		AtomicReference<String> error = new AtomicReference<>("");
 		AtomicBoolean success = new AtomicBoolean(false);
 
 		subversion.commit(

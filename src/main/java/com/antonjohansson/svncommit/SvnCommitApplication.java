@@ -21,7 +21,7 @@ import com.antonjohansson.svncommit.core.utils.UtilityModule;
 import com.antonjohansson.svncommit.core.view.View;
 
 import static com.google.inject.name.Names.named;
-import static java.lang.System.exit;
+import static javafx.application.Platform.exit;
 import static org.apache.commons.cli.Option.builder;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
@@ -82,7 +82,7 @@ public class SvnCommitApplication extends Application
 		if (command.hasOption("version"))
 		{
 			printVersion();
-			exit(0);
+			exit();
 			return;
 		}
 
@@ -98,7 +98,7 @@ public class SvnCommitApplication extends Application
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("svn-commit", OPTIONS);
-		exit(1);
+		exit();
 	}
 
 	private Configuration getConfiguration(CommandLine command)

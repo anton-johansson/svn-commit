@@ -187,6 +187,27 @@
 				<version>1.4</version>
 				<configuration>
 					<dataSet>
+						<!-- License -->
+						<data>
+							<src>${basedir}/LICENSE</src>
+							<type>file</type>
+							<mapper>
+								<type>perm</type>
+								<prefix>/opt/svn-commit/doc</prefix>
+							</mapper>
+						</data>
+
+						<!-- Launcher -->
+						<data>
+							<src>src/deb/data/svn-commit</src>
+							<type>file</type>
+							<mapper>
+								<type>perm</type>
+								<prefix>/opt/svn-commit/bin</prefix>
+								<filemode>755</filemode>
+							</mapper>
+						</data>
+
 						<!-- The JAR file -->
 						<data>
 							<src>${project.build.directory}/${project.build.finalName}-jar-with-dependencies.jar</src>
@@ -194,22 +215,16 @@
 							<type>file</type>
 							<mapper>
 								<type>perm</type>
-								<prefix>/usr/share/svn-commit/lib</prefix>
-								<user>loader</user>
-								<group>loader</group>
+								<prefix>/opt/svn-commit/bin</prefix>
 							</mapper>
 						</data>
 
-						<!-- Launcher -->
+						<!-- Symbolic link for launcher -->
 						<data>
-							<src>src/deb/svn-commit</src>
-							<type>file</type>
-							<mapper>
-								<type>perm</type>
-								<prefix>/usr/bin</prefix>
-								<user>loader</user>
-								<group>loader</group>
-							</mapper>
+							<type>link</type>
+							<symlink>true</symlink>
+							<linkName>/usr/bin/svn-commit</linkName>
+							<linkTarget>/opt/svn-commit/bin/svn-commit</linkTarget>
 						</data>
 					</dataSet>
 				</configuration>

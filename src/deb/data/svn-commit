@@ -15,4 +15,4 @@
 # limitations under the License.
 #
 
-java -jar /usr/share/svn-commit/lib/svn-commit.jar "$@"
+java -jar /opt/svn-commit/bin/svn-commit.jar "$@"

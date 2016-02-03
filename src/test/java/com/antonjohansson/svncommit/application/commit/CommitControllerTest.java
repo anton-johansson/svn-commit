@@ -112,7 +112,7 @@ public class CommitControllerTest extends Assert
 		onKeyPressedHandler.handle(event);
 		onKeyPressedHandler.handle(event);
 
-		sleep(100);
+		sleep(250);
 
 		// We only want two calls, one for the initialize, and one for the first refresh.
 		verify(commitView, times(2)).setItems(MODIFIED_ITEMS);

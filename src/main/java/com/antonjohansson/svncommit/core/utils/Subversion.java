@@ -23,8 +23,6 @@ import java.util.function.Consumer;
 /**
  * Manages subversion.
  *
- * TODO: Bind path/directory in IOC?
- *
  * @author Anton Johansson
  */
 public interface Subversion
@@ -57,8 +55,7 @@ public interface Subversion
 	 * @param message The message to use in the commit.
 	 * @param filePaths The path of the files to commit.
 	 * @param onData The consumer that will accept log output.
-	 * @param onError The consumer that will accept error output.
 	 * @param onComplete The task to run when the update is complete.
 	 */
-	void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<String> onError, Consumer<Boolean> onComplete);
+	void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<Boolean> onComplete);
 }

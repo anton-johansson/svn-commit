@@ -58,12 +58,23 @@ public class ConsoleViewTest extends AbstractViewTest<ConsoleView>
 	}
 
 	@Test
-	public void test_showIcon()
+	public void test_showCompletionIcon_success()
 	{
 		assertFalse(icon.isVisible());
 		assertNull(icon.getImage());
 
-		view.showIcon("success");
+		view.showCompletionIcon(true);
+		assertTrue(icon.isVisible());
+		assertNotNull(icon.getImage());
+	}
+
+	@Test
+	public void test_showCompletionIcon_failed()
+	{
+		assertFalse(icon.isVisible());
+		assertNull(icon.getImage());
+
+		view.showCompletionIcon(false);
 		assertTrue(icon.isVisible());
 		assertNotNull(icon.getImage());
 	}

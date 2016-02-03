@@ -20,8 +20,6 @@ import com.antonjohansson.svncommit.core.controller.Controller;
 import com.antonjohansson.svncommit.core.utils.Subversion;
 import com.antonjohansson.svncommit.core.view.ConsoleView;
 
-import java.util.function.Consumer;
-
 import com.google.inject.Inject;
 
 /**
@@ -44,9 +42,6 @@ class UpdateController extends AbstractController<ConsoleView>
 	@Override
 	public void initialize()
 	{
-		Consumer<String> onData = output -> view.append(output);
-		Consumer<Boolean> onComplete = success -> view.showIcon(success ? "success" : "failed");
-
-		subversion.update(onData, onComplete);
+		subversion.update(view::append, view::showCompletionIcon);
 	}
 }

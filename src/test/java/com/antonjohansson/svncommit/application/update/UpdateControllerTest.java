@@ -15,7 +15,6 @@
  */
 package com.antonjohansson.svncommit.application.update;
 
-import com.antonjohansson.svncommit.application.update.UpdateController;
 import com.antonjohansson.svncommit.core.utils.Subversion;
 import com.antonjohansson.svncommit.core.view.ConsoleView;
 
@@ -80,7 +79,7 @@ public class UpdateControllerTest extends Assert
 		inOrder.verify(subversion).update(any(), any());
 		inOrder.verify(consoleView).append("some log line #1");
 		inOrder.verify(consoleView).append("some other line #2");
-		inOrder.verify(consoleView).showIcon("success");
+		inOrder.verify(consoleView).showCompletionIcon(true);
 		verifyNoMoreInteractions(consoleView, subversion);
 	}
 }

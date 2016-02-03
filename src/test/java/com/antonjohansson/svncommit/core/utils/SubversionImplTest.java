@@ -130,19 +130,16 @@ public class SubversionImplTest extends Assert
 		when(shell.getTemporaryFile(asList("some-commit-message"), "commit-message")).thenReturn(new File("/file-with-message"));
 
 		AtomicReference<String> output = new AtomicReference<>("");
-		AtomicReference<String> error = new AtomicReference<>("");
 		AtomicBoolean success = new AtomicBoolean(false);
 
 		subversion.commit(
 				"some-commit-message",
 				asList("test1.txt", "test2.txt"),
 				o -> output.set(output.get().concat(o)),
-				e -> error.set(error.get().concat(e)),
 				s -> success.set(s));
 
 		verify(shell).executeAndPipeOutput(any(), any(), any(), eq(commitCommand));
-		assertEquals("success-line", output.get());
-		assertEquals("error-line", error.get());
+		assertEquals("success-lineerror-line", output.get());
 		assertTrue(success.get());
 	}
 }

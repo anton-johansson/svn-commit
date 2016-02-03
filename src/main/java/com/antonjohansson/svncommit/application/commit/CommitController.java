@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -98,14 +97,12 @@ class CommitController extends AbstractController<LoadingView>
 					.height(300.0)
 					.show();
 
-			Consumer<String> onData = data -> consoleView.append(data);
-			Consumer<Boolean> onComplete = success -> consoleView.showIcon(success ? "success" : "failed");
 			Collection<String> paths = items.stream()
 					.filter(s -> s.isDoCommit())
 					.map(s -> s.getFileName())
 					.collect(toList());
 
-			subversion.commit(message, paths, onData, onData, onComplete);
+			subversion.commit(message, paths, consoleView::append, consoleView::showCompletionIcon);
 		});
 	}
 

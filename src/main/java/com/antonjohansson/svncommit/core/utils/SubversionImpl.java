@@ -76,7 +76,7 @@ class SubversionImpl implements Subversion
 
 	/** {@inheritDoc} */
 	@Override
-	public void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<String> onError, Consumer<Boolean> onComplete)
+	public void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<Boolean> onComplete)
 	{
 		File temporaryFile = shell.getTemporaryFile(asList(message), "commit-message");
 
@@ -87,6 +87,6 @@ class SubversionImpl implements Subversion
 
 		filePaths.forEach(c -> command.append(" '").append(c).append("'"));
 
-		shell.executeAndPipeOutput(onData, onError, onComplete, command.toString());
+		shell.executeAndPipeOutput(onData, onData, onComplete, command.toString());
 	}
 }

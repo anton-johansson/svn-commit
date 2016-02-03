@@ -42,13 +42,14 @@ public class ConsoleView extends AbstractView
 	}
 
 	/**
-	 * Shows the icon overlay with the given icon.
+	 * Shows the completion icon overlay.
 	 *
-	 * @param iconName The name of the icon to show.
+	 * @param success Whether or not the console operation succeeded.
 	 */
-	public void showIcon(String iconName)
+	public void showCompletionIcon(boolean success)
 	{
-		Image image = new Image(iconName + ".png");
+		String iconName = success ? "success.png" : "failed.png";
+		Image image = new Image(iconName);
 
 		icon.setVisible(true);
 		icon.setImage(image);

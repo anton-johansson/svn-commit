@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit;
 
+import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.controller.Controller;
 import com.antonjohansson.svncommit.core.utils.UtilityModule;
 import com.antonjohansson.svncommit.core.view.View;
@@ -87,9 +88,11 @@ public class SvnCommitApplication extends Application
 
 		if (command.hasOption("application"))
 		{
+			Configuration configuration = getConfiguration(command);
+
 			String application = command.getOptionValue("application");
 			String path = command.getOptionValue("path");
-			configure(stage, application, new File(path));
+			configure(stage, application, new File(path), configuration);
 			return;
 		}
 
@@ -98,13 +101,25 @@ public class SvnCommitApplication extends Application
 		exit(1);
 	}
 
-	private void configure(Stage stage, String application, File path)
+	private Configuration getConfiguration(CommandLine command)
+	{
+		if (command.hasOption("configuration"))
+		{
+			String configurationFilePath = command.getOptionValue("configuration");
+			File configurationFile = new File(configurationFilePath);
+			return new Configuration(configurationFile);
+		}
+		return new Configuration();
+	}
+
+	private void configure(Stage stage, String application, File path, Configuration configuration)
 	{
 		Module applicationModule = new ApplicationModule();
 		Module utilityModule = new UtilityModule();
 		Module configurationModule = (binder) ->
 		{
 			binder.bind(File.class).toInstance(path);
+			binder.bind(Configuration.class).toInstance(configuration);
 		};
 
 		Injector injector = Guice.createInjector(applicationModule, utilityModule, configurationModule);

@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.commit;
 
+import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.controller.AbstractController;
 import com.antonjohansson.svncommit.core.controller.Controller;
 import com.antonjohansson.svncommit.core.domain.ModifiedItem;
@@ -45,6 +46,7 @@ import javafx.scene.input.KeyCode;
 class CommitController extends AbstractController<LoadingView>
 {
 	private final Map<KeyCode, Runnable> keyMappings = keyMappings();
+	private final Configuration configuration;
 	private final CommitView commitView;
 	private final LoadingView loadingView;
 	private final Provider<ConsoleView> consoleViewProvider;
@@ -54,6 +56,7 @@ class CommitController extends AbstractController<LoadingView>
 
 	@Inject
 	CommitController(
+			Configuration configuration,
 			CommitView commitView,
 			LoadingView loadingView,
 			Provider<ConsoleView> consoleViewProvider,
@@ -61,6 +64,7 @@ class CommitController extends AbstractController<LoadingView>
 			Subversion subversion)
 	{
 		super(loadingView);
+		this.configuration = configuration;
 		this.commitView = commitView;
 		this.loadingView = loadingView;
 		this.consoleViewProvider = consoleViewProvider;
@@ -104,6 +108,8 @@ class CommitController extends AbstractController<LoadingView>
 
 			subversion.commit(message, paths, consoleView::append, consoleView::showCompletionIcon);
 		});
+
+		commitView.setReplicationColumnsVisible(configuration.isReplicationEnabled());
 	}
 
 	private void refresh()

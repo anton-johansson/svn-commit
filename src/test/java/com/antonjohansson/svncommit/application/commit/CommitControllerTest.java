@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.commit;
 
+import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.domain.FileStatus;
 import com.antonjohansson.svncommit.core.domain.ModifiedItem;
 import com.antonjohansson.svncommit.core.utils.Subversion;
@@ -62,6 +63,7 @@ public class CommitControllerTest extends Assert
 			modifiedItem(4),
 			modifiedItem(5));
 
+	@Mock private Configuration configuration;
 	@Mock private CommitView commitView;
 	@Mock private ConsoleView consoleView;
 	@Mock private DialogFactory dialogFactory;
@@ -82,8 +84,9 @@ public class CommitControllerTest extends Assert
 
 		initMocks(this);
 		loadingView = new StubbedLoadingView();
-		controller = new CommitController(commitView, loadingView, () -> consoleView, dialogFactory, subversion);
+		controller = new CommitController(configuration, commitView, loadingView, () -> consoleView, dialogFactory, subversion);
 
+		when(configuration.isReplicationEnabled()).thenReturn(true);
 		when(subversion.getModifiedItems()).thenReturn(MODIFIED_ITEMS);
 		doAnswer(onKeyPressedAnswer).when(commitView).setOnKeyPressed(any());
 
@@ -100,6 +103,7 @@ public class CommitControllerTest extends Assert
 		verify(commitView).setCommitHandler(any());
 		verify(commitView).setOnKeyPressed(any());
 		verify(commitView).setOnMouseDoubleClicked(any());
+		verify(commitView).setReplicationColumnsVisible(true);
 		verify(commitView).setItems(MODIFIED_ITEMS);
 		verifyNoMoreInteractions(commitView);
 	}

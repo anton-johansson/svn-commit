@@ -63,6 +63,7 @@ public class CommitView extends AbstractView implements Initializable
 	@FXML private TableView<ModifiedItem> tableView;
 	@FXML private TextArea commitMessage;
 	@FXML private TextField activityID;
+	private TableColumn<ModifiedItem, DbUpdateLocation> replicationColumn;
 	private Consumer<String> commitHandler;
 
 	/**
@@ -102,12 +103,22 @@ public class CommitView extends AbstractView implements Initializable
 
 	/**
 	 * Gets the selected items as a stream.
-	 * 
+	 *
 	 * @return Returns the stream of selected items.
 	 */
 	public Stream<ModifiedItem> selectedItems()
 	{
 		return tableView.getSelectionModel().getSelectedItems().stream();
+	}
+
+	/**
+	 * Sets the visibility of the replication columns.
+	 *
+	 * @param replicationColumnsVisible Whether or not the replication columns should be visible.
+	 */
+	public void setReplicationColumnsVisible(boolean replicationColumnsVisible)
+	{
+		replicationColumn.setVisible(replicationColumnsVisible);
 	}
 
 	/**
@@ -130,7 +141,7 @@ public class CommitView extends AbstractView implements Initializable
 
 	/**
 	 * Sets the key-press event handler.
-	 * 
+	 *
 	 * @param eventHandler The handler.
 	 */
 	public void setOnKeyPressed(EventHandler<KeyEvent> eventHandler)
@@ -141,7 +152,7 @@ public class CommitView extends AbstractView implements Initializable
 
 	/**
 	 * Sets the mouse double-click event handler.
-	 * 
+	 *
 	 * @param runnable The runnable to run on double-click.
 	 */
 	public void setOnMouseDoubleClicked(Runnable runnable)
@@ -190,11 +201,11 @@ public class CommitView extends AbstractView implements Initializable
 		fileName.prefWidthProperty().bind(tableView.widthProperty().subtract(DO_COMMIT_WIDTH + STATUS_WIDTH + REPLICATION_WIDTH + OFFSET));
 		tableView.getColumns().add(fileName);
 
-		TableColumn<ModifiedItem, DbUpdateLocation> replication = new TableColumn<>("Replicate");
-		replication.setCellValueFactory(p -> p.getValue().replicationProperty());
-		replication.setCellFactory(p -> new ReplicationCell());
-		replication.setPrefWidth(REPLICATION_WIDTH);
-		tableView.getColumns().add(replication);
+		replicationColumn = new TableColumn<>("Replicate");
+		replicationColumn.setCellValueFactory(p -> p.getValue().replicationProperty());
+		replicationColumn.setCellFactory(p -> new ReplicationCell());
+		replicationColumn.setPrefWidth(REPLICATION_WIDTH);
+		tableView.getColumns().add(replicationColumn);
 	}
 
 	/**

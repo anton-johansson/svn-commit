@@ -162,11 +162,11 @@ public class ModifiedItem
 
 		ModifiedItem that = (ModifiedItem) obj;
 		return new EqualsBuilder()
-			.append(this.isDoCommit(), that.isDoCommit())
-			.append(this.getStatus(), that.getStatus())
-			.append(this.getFileName(), that.getFileName())
-			.append(this.getReplication(), that.getReplication())
-			.isEquals();
+				.append(this.isDoCommit(), that.isDoCommit())
+				.append(this.getStatus(), that.getStatus())
+				.append(this.getFileName(), that.getFileName())
+				.append(this.getReplication(), that.getReplication())
+				.isEquals();
 	}
 
 	/** {@inheritDoc} */
@@ -174,10 +174,10 @@ public class ModifiedItem
 	public String toString()
 	{
 		return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
-			.append("doCommit", isDoCommit())
-			.append("status", getStatus())
-			.append("fileName", getFileName())
-			.append("replication", getReplication())
-			.toString();
+				.append("doCommit", isDoCommit())
+				.append("status", getStatus())
+				.append("fileName", getFileName())
+				.append("replication", getReplication())
+				.toString();
 	}
 }

@@ -92,31 +92,30 @@ class CommitController extends AbstractController<LoadingView>
 			ConsoleView consoleView = consoleViewProvider.get();
 
 			dialogFactory.create()
-				.view(consoleView)
-				.onClose(event -> refresh())
-				.width(600.0)
-				.height(300.0)
-				.show();
+					.view(consoleView)
+					.onClose(event -> refresh())
+					.width(600.0)
+					.height(300.0)
+					.show();
 
 			Consumer<String> onData = data -> consoleView.append(data);
 			Consumer<Boolean> onComplete = success -> consoleView.showIcon(success ? "success" : "failed");
 			Collection<String> paths = items.stream()
-				.filter(s -> s.isDoCommit())
-				.map(s -> s.getFileName())
-				.collect(toList());
+					.filter(s -> s.isDoCommit())
+					.map(s -> s.getFileName())
+					.collect(toList());
 
 			subversion.commit(message, paths, onData, onData, onComplete);
 		});
 	}
 
-	private synchronized void refresh()
+	private void refresh()
 	{
-		if (loadingView.isLoading())
+		if (!startLoading())
 		{
 			return;
 		}
 
-		loadingView.setLoading(true);
 		Runnable loader = () ->
 		{
 			items = getModifiedItems();
@@ -124,6 +123,16 @@ class CommitController extends AbstractController<LoadingView>
 			loadingView.setLoading(false);
 		};
 		new Thread(loader).start();
+	}
+
+	private synchronized boolean startLoading()
+	{
+		if (!loadingView.isLoading())
+		{
+			loadingView.setLoading(true);
+			return true;
+		}
+		return false;
 	}
 
 	private void compare()

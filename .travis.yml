@@ -13,3 +13,11 @@ before_install:
 
 after_success:
   - mvn clean cobertura:cobertura coveralls:report
+
+deploy:
+  - provider: releases
+  - api_key: "${GITHUB_TOKEN}"
+  - file: "svn-commit_${TRAVIS_TAG}_all.deb"
+  - skip_cleanup: true
+  - on:
+     - tags: true

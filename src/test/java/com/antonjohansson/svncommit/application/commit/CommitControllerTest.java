@@ -39,6 +39,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.stubbing.Answer;
@@ -104,6 +105,7 @@ public class CommitControllerTest extends Assert
 	}
 
 	@Test
+	@Ignore
 	public void test_that_F5_triggers_a_refresh() throws Exception
 	{
 		KeyEvent event = keyEvent(F5);

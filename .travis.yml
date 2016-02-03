@@ -14,10 +14,14 @@ before_install:
 after_success:
   - mvn clean cobertura:cobertura coveralls:report
 
+before_deploy:
+  - mvn package -DskipTests
+  - export DEB_FILE=$(ls target/svn-commit*.deb)
+
 deploy:
   provider: releases
   api_key: "${GITHUB_TOKEN}"
-  file: "svn-commit_${TRAVIS_TAG}_all.deb"
+  file: "${DEB_FILE}"
   skip_cleanup: true
   on:
     tags: true

@@ -133,6 +133,7 @@
 					<excludes>
 						<exclude>README.md</exclude>
 						<exclude>LICENSE</exclude>
+						<exclude>release.sh</exclude>
 						<exclude>src/deb/**</exclude>
 					</excludes>
 					<mapping>

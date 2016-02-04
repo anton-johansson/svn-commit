@@ -54,15 +54,7 @@ class Bash implements Shell
 	public void execute(String... commandLines)
 	{
 		File scriptFile = getTemporaryScriptFile(asList(commandLines));
-
-		try
-		{
-			execute(path, scriptFile);
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException("Could not execute temporary bash script", e);
-		}
+		execute(path, scriptFile);
 	}
 
 	/** {@inheritDoc} */
@@ -70,10 +62,10 @@ class Bash implements Shell
 	public <R> R execute(ThrowingFunction<InputStream, R, IOException> function, String... commandLines)
 	{
 		File scriptFile = getTemporaryScriptFile(asList(commandLines));
+		Process process = execute(path, scriptFile);
 
 		try
 		{
-			Process process = execute(path, scriptFile);
 			return function.apply(process.getInputStream());
 		}
 		catch (IOException e)
@@ -87,12 +79,11 @@ class Bash implements Shell
 	public void executeAndPipeOutput(Consumer<String> onData, Consumer<String> onError, Consumer<Boolean> onComplete, String... commandLines)
 	{
 		File scriptFile = getTemporaryScriptFile(asList(commandLines));
+		Process process = execute(path, scriptFile);
 
-		try
+		try (InputStream logStream = process.getInputStream();
+			 InputStream errorStream = process.getErrorStream())
 		{
-			Process process = execute(path, scriptFile);
-			InputStream logStream = process.getInputStream();
-			InputStream errorStream = process.getErrorStream();
 			while (isAvailable(process, logStream, errorStream))
 			{
 				if (logStream.available() > 0)
@@ -154,11 +145,18 @@ class Bash implements Shell
 	 * @param scriptFile The script file to execute.
 	 * @return Returns the process.
 	 */
-	private Process execute(File directory, File scriptFile) throws IOException
+	private Process execute(File directory, File scriptFile)
 	{
-		return new ProcessBuilder("bash", scriptFile.getAbsolutePath())
-			.directory(directory)
-			.start();
+		try
+		{
+			return new ProcessBuilder("bash", scriptFile.getAbsolutePath())
+					.directory(directory)
+					.start();
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Exception occurred when executing bash script", e);
+		}
 	}
 
 	/**

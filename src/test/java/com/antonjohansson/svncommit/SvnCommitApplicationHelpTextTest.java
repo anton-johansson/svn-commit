@@ -20,9 +20,6 @@ import static java.lang.System.lineSeparator;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -31,12 +28,12 @@ import org.junit.Test;
  *
  * @author Anton Johansson
  */
-public class SvnCommitApplicationHelpTextTest extends Assert
+public class SvnCommitApplicationHelpTextTest extends AbstractSvnCommitApplicationTest
 {
 	private PrintStream oldOutput;
 	private ByteArrayOutputStream output;
 
-	@Before
+	@Override
 	public void setUp()
 	{
 		output = new ByteArrayOutputStream();
@@ -46,17 +43,15 @@ public class SvnCommitApplicationHelpTextTest extends Assert
 		System.setOut(stream);
 	}
 
-	@After
+	@Override
 	public void tearDown()
 	{
 		System.setOut(oldOutput);
 	}
 
 	@Test
-	public void test_print_help_text()
+	public void test_print_help_text() throws Exception
 	{
-		EntryPoint.main(new String[] {});
-
 		String actual = output.toString();
 		String expected = new StringBuilder()
 				.append("usage: svn-commit").append(lineSeparator())

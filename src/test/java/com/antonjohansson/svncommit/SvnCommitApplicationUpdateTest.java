@@ -16,51 +16,34 @@
 package com.antonjohansson.svncommit;
 
 import static java.lang.System.lineSeparator;
-import static org.junit.Assert.assertEquals;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 import org.junit.Test;
 
+import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+
 /**
  * Integration test of {@link SvnCommitApplication} that tests running the
- * application with the {@code --version} switch.
+ * application with the 'update' argument.
  *
  * @author Anton Johansson
  */
-public class SvnCommitApplicationVersionTest extends AbstractSvnCommitApplicationTest
+public class SvnCommitApplicationUpdateTest extends AbstractSvnCommitApplicationTest
 {
-	private volatile PrintStream oldOutput;
-	private volatile ByteArrayOutputStream output;
-
-	public SvnCommitApplicationVersionTest() throws Exception
+	public SvnCommitApplicationUpdateTest()
 	{
-		super("--version");
-	}
-
-	@Override
-	public void setUp()
-	{
-		output = new ByteArrayOutputStream();
-		PrintStream stream = new PrintStream(output);
-
-		oldOutput = System.out;
-		System.setOut(stream);
-	}
-
-	@Override
-	public void tearDown()
-	{
-		System.setOut(oldOutput);
+		super("--application", "update", "--path", ".");
 	}
 
 	@Test
-	public void test_print_version() throws Exception
+	public void test_update() throws Exception
 	{
-		String actual = output.toString();
-		String expected = "Development" + lineSeparator();
-
+		TextArea console = getNode("console");
+		String expected = "Skipped '.'" + lineSeparator() + "Summary of conflicts:" + lineSeparator() + "  Skipped paths: 1" + lineSeparator();
+		String actual = console.getText();
 		assertEquals(expected, actual);
+		
+		ImageView icon = getNode("icon");
+		assertTrue(icon.isVisible());
 	}
 }

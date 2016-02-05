@@ -79,7 +79,7 @@ public abstract class AbstractViewTest<V extends View> extends ApplicationTest
 
 	/**
 	 * Gets a node by its unique identifier.
-	 * 
+	 *
 	 * @param identifier The identifier of the node.
 	 * @return Returns the node.
 	 */

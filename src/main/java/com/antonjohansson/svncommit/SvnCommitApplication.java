@@ -20,9 +20,12 @@ import com.antonjohansson.svncommit.core.controller.Controller;
 import com.antonjohansson.svncommit.core.utils.UtilityModule;
 import com.antonjohansson.svncommit.core.view.View;
 
+import static com.antonjohansson.svncommit.CLI.APPLICATION;
+import static com.antonjohansson.svncommit.CLI.CONFIGURATION;
+import static com.antonjohansson.svncommit.CLI.OPTIONS;
+import static com.antonjohansson.svncommit.CLI.PATH;
+import static com.antonjohansson.svncommit.CLI.VERSION;
 import static com.google.inject.name.Names.named;
-import static javafx.application.Platform.exit;
-import static org.apache.commons.cli.Option.builder;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 import java.io.File;
@@ -30,7 +33,6 @@ import java.io.File;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.google.inject.Guice;
@@ -39,6 +41,7 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -50,62 +53,51 @@ import javafx.stage.Stage;
  */
 public class SvnCommitApplication extends Application
 {
-	private static final Options OPTIONS = new Options()
-			.addOption(builder("c")
-					.longOpt("configuration")
-					.desc("the location of the configuration file")
-					.hasArg()
-					.argName("PATH")
-					.build())
-			.addOption(builder("a")
-					.longOpt("application")
-					.desc("the application to run, e. g. 'commit'")
-					.hasArg()
-					.argName("APP")
-					.build())
-			.addOption(builder("p")
-					.longOpt("path")
-					.desc("the path to execute SVN commands in")
-					.hasArg()
-					.argName("PATH")
-					.build())
-			.addOption(builder("v")
-					.longOpt("version")
-					.desc("prints the version of the application")
-					.build());
+	private static Runnable exit = () -> Platform.exit();
 
+	/**
+	 * Sets the exit action for forced exits.
+	 * 
+	 * @param exit The action that will be executed upon forced exits.
+	 */
+	public static void setExit(Runnable exit)
+	{
+		SvnCommitApplication.exit = exit;
+	}
+
+	/** {@inheritDoc} */
 	@Override
 	public void start(Stage stage) throws Exception
 	{
 		CommandLine command = getCommand();
 
-		if (command.hasOption("version"))
+		if (command.hasOption(VERSION))
 		{
 			printVersion();
-			exit();
+			exit.run();
 			return;
 		}
 
-		if (command.hasOption("application"))
+		if (command.hasOption(APPLICATION))
 		{
 			Configuration configuration = getConfiguration(command);
 
-			String application = command.getOptionValue("application");
-			String path = command.getOptionValue("path");
+			String application = command.getOptionValue(APPLICATION);
+			String path = command.getOptionValue(PATH);
 			configure(stage, application, new File(path), configuration);
 			return;
 		}
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("svn-commit", OPTIONS);
-		exit();
+		exit.run();
 	}
 
 	private Configuration getConfiguration(CommandLine command)
 	{
-		if (command.hasOption("configuration"))
+		if (command.hasOption(CONFIGURATION))
 		{
-			String configurationFilePath = command.getOptionValue("configuration");
+			String configurationFilePath = command.getOptionValue(CONFIGURATION);
 			File configurationFile = new File(configurationFilePath);
 			return new Configuration(configurationFile);
 		}

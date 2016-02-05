@@ -25,7 +25,7 @@ import com.antonjohansson.svncommit.core.view.ViewModule;
  *
  * @author Anton Johansson
  */
-public class ApplicationModule extends AbstractApplicationModule
+class ApplicationModule extends AbstractApplicationModule
 {
 	@Override
 	protected void configure()

@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -45,6 +46,7 @@ import javafx.stage.Window;
  *
  * @author Anton Johansson
  */
+@Ignore
 public class DialogFactoryTest extends ApplicationTest
 {
 	private final DialogFactory factory = new DialogFactory();

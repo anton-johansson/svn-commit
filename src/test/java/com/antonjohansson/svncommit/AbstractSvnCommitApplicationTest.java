@@ -15,25 +15,30 @@
  */
 package com.antonjohansson.svncommit;
 
+import com.antonjohansson.svncommit.core.utils.ForcedExit;
 import com.antonjohansson.svncommit.core.view.ViewAssertUtils;
 
 import static com.google.common.util.concurrent.Runnables.doNothing;
 
+import java.util.Set;
+
 import org.junit.After;
 import org.junit.Before;
+import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.toolkit.ApplicationFixture;
 import org.testfx.toolkit.impl.ApplicationAdapter;
 import org.testfx.toolkit.impl.ApplicationServiceImpl;
 
 import javafx.application.Application;
+import javafx.scene.Node;
 
 /**
  * Abstract skeleton for {@link Application} tests.
  *
  * @author Anton Johansson
  */
-public abstract class AbstractSvnCommitApplicationTest extends ViewAssertUtils
+public abstract class AbstractSvnCommitApplicationTest extends FxRobot
 {
 	private final String[] arguments;
     private ApplicationFixture applicationFixture;
@@ -41,7 +46,7 @@ public abstract class AbstractSvnCommitApplicationTest extends ViewAssertUtils
     protected AbstractSvnCommitApplicationTest(String... arguments)
 	{
 		this.arguments = arguments;
-		SvnCommitApplication.setExit(doNothing());
+		ForcedExit.setExit(doNothing());
 	}
 
 	@Before
@@ -77,5 +82,29 @@ public abstract class AbstractSvnCommitApplicationTest extends ViewAssertUtils
 	 */
 	protected void tearDown()
 	{
+	}
+
+	/**
+	 * @see ViewAssertUtils#getNode(String)
+	 */
+	protected <N extends Node> N getNode(String identifier)
+	{
+		return ViewAssertUtils.getNode(identifier);
+	}
+
+	/**
+	 * @see ViewAssertUtils#getNodes(Class)
+	 */
+	protected <N extends Node> Set<N> getNodes(Class<N> type)
+	{
+		return ViewAssertUtils.getNodes(type);
+	}
+
+	/**
+	 * @see ViewAssertUtils#getNodesByStyle(String)
+	 */
+	protected <N extends Node> Set<N> getNodesByStyle(String styleClass)
+	{
+		return ViewAssertUtils.getNodesByStyle(styleClass);
 	}
 }

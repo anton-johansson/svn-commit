@@ -17,7 +17,7 @@ package com.antonjohansson.svncommit.core.concurrent;
 
 import com.antonjohansson.svncommit.core.view.DialogFactory;
 
-import static javafx.application.Platform.exit;
+import static com.antonjohansson.svncommit.core.utils.ForcedExit.exit;
 
 import java.util.concurrent.ExecutorService;
 

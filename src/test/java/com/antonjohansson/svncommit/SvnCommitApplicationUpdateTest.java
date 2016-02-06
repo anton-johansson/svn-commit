@@ -16,6 +16,8 @@
 package com.antonjohansson.svncommit;
 
 import static java.lang.System.lineSeparator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -38,11 +40,13 @@ public class SvnCommitApplicationUpdateTest extends AbstractSvnCommitApplication
 	@Test
 	public void test_update() throws Exception
 	{
+		sleep(100);
+
 		TextArea console = getNode("console");
 		String expected = "Skipped '.'" + lineSeparator() + "Summary of conflicts:" + lineSeparator() + "  Skipped paths: 1" + lineSeparator();
 		String actual = console.getText();
 		assertEquals(expected, actual);
-		
+
 		ImageView icon = getNode("icon");
 		assertTrue(icon.isVisible());
 	}

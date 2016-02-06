@@ -15,15 +15,21 @@
  */
 package com.antonjohansson.svncommit;
 
-import static java.lang.Thread.sleep;
 import static java.util.Arrays.asList;
+import static javafx.scene.input.MouseButton.PRIMARY;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Test;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Window;
 
 /**
  * Integration test of {@link SvnCommitApplication} that tests running the
@@ -45,12 +51,22 @@ public class SvnCommitApplicationInvalidPathTest extends AbstractSvnCommitApplic
 
 		Set<String> expected = new HashSet<>(asList("Error", "Cannot run program \"bash\" (in directory \"/some/invalid/path/that/does/not/exist\"): error=2, No such file or directory"));
 		Set<String> actual = new HashSet<>();
-
 		for (Label label : getNodes(Label.class))
 		{
 			actual.add(label.getText());
 		}
-
 		assertEquals(expected, actual);
+
+		Optional<Button> button = getNodes(Button.class).stream().findAny();
+		assertTrue(button.isPresent());
+
+		Window window = button.get().getScene().getWindow();
+		assertTrue(window.isShowing());
+
+		// Click the close button
+		moveTo(button.get());
+		clickOn(PRIMARY);
+
+		assertFalse(window.isShowing());
 	}
 }

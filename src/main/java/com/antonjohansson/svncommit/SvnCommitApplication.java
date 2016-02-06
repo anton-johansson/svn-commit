@@ -17,6 +17,7 @@ package com.antonjohansson.svncommit;
 
 import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.controller.Controller;
+import com.antonjohansson.svncommit.core.utils.ForcedExit;
 import com.antonjohansson.svncommit.core.utils.UtilityModule;
 import com.antonjohansson.svncommit.core.view.View;
 
@@ -42,7 +43,6 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -54,18 +54,6 @@ import javafx.stage.Stage;
  */
 public class SvnCommitApplication extends Application
 {
-	private static Runnable exit = () -> Platform.exit();
-
-	/**
-	 * Sets the exit action for forced exits.
-	 *
-	 * @param exit The action that will be executed upon forced exits.
-	 */
-	public static void setExit(Runnable exit)
-	{
-		SvnCommitApplication.exit = exit;
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	public void start(Stage stage) throws Exception
@@ -75,7 +63,7 @@ public class SvnCommitApplication extends Application
 		if (command.hasOption(VERSION))
 		{
 			printVersion();
-			exit.run();
+			ForcedExit.exit();
 			return;
 		}
 
@@ -91,7 +79,7 @@ public class SvnCommitApplication extends Application
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("svn-commit", OPTIONS);
-		exit.run();
+		ForcedExit.exit();
 	}
 
 	private File getPath(CommandLine command)

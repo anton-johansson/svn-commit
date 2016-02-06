@@ -16,6 +16,7 @@
 package com.antonjohansson.svncommit;
 
 import static java.lang.System.lineSeparator;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

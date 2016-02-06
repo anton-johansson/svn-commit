@@ -38,7 +38,7 @@ public class ViewAssertUtils extends Assert
 	 * @param identifier The identifier of the node.
 	 * @return Returns the node.
 	 */
-	protected static <N extends Node> N getNode(String identifier)
+	public static <N extends Node> N getNode(String identifier)
 	{
 		NodeQuery query = FxAssert.assertContext().getNodeFinder().lookup("#" + identifier);
 		return query.queryFirst();
@@ -50,7 +50,7 @@ public class ViewAssertUtils extends Assert
 	 * @param styleClass The style class of the nodes.
 	 * @return Returns the set of nodes.
 	 */
-	protected static <N extends Node> Set<N> getNodesByStyle(String styleClass)
+	public static <N extends Node> Set<N> getNodesByStyle(String styleClass)
 	{
 		NodeQuery query = FxAssert.assertContext().getNodeFinder().lookup("." + styleClass);
 		return query.queryAll();
@@ -62,7 +62,7 @@ public class ViewAssertUtils extends Assert
 	 * @param type The type of the nodes to get.
 	 * @return Returns the set of nodes.
 	 */
-	protected static <N extends Node> Set<N> getNodes(Class<N> type)
+	public static <N extends Node> Set<N> getNodes(Class<N> type)
 	{
 		NodeQuery query = FxAssert.assertContext().getNodeFinder().lookup(isA(type));
 		return query.queryAll();

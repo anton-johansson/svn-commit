@@ -18,9 +18,7 @@ package com.antonjohansson.svncommit.core.view;
 import java.io.IOException;
 import java.net.URL;
 
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.service.query.NodeQuery;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -53,7 +51,7 @@ public abstract class AbstractViewTest<V extends View> extends ApplicationTest
 	{
 		String name = viewClass.getSimpleName() + ".fxml";
 		URL location = viewClass.getResource(name);
-		
+
 		try
 		{
 			FXMLLoader loader = new FXMLLoader(location);
@@ -68,7 +66,7 @@ public abstract class AbstractViewTest<V extends View> extends ApplicationTest
 		{
 			throw new RuntimeException(e);
 		}
-		
+
 		initNodes();
 	}
 
@@ -78,14 +76,10 @@ public abstract class AbstractViewTest<V extends View> extends ApplicationTest
 	protected abstract void initNodes();
 
 	/**
-	 * Gets a node by its unique identifier.
-	 *
-	 * @param identifier The identifier of the node.
-	 * @return Returns the node.
+	 * @see ViewAssertUtils#getNode(String)
 	 */
 	protected <N extends Node> N getNode(String identifier)
 	{
-		NodeQuery query = FxAssert.assertContext().getNodeFinder().lookup("#" + identifier);
-		return query.queryFirst();
+		return ViewAssertUtils.getNode(identifier);
 	}
 }

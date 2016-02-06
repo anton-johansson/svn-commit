@@ -15,30 +15,25 @@
  */
 package com.antonjohansson.svncommit;
 
-import static com.google.common.util.concurrent.Runnables.doNothing;
-import static org.hamcrest.Matchers.isA;
+import com.antonjohansson.svncommit.core.view.ViewAssertUtils;
 
-import java.util.Set;
+import static com.google.common.util.concurrent.Runnables.doNothing;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
-import org.testfx.api.FxAssert;
 import org.testfx.api.FxToolkit;
-import org.testfx.service.query.NodeQuery;
 import org.testfx.toolkit.ApplicationFixture;
 import org.testfx.toolkit.impl.ApplicationAdapter;
 import org.testfx.toolkit.impl.ApplicationServiceImpl;
 
 import javafx.application.Application;
-import javafx.scene.Node;
 
 /**
  * Abstract skeleton for {@link Application} tests.
  *
  * @author Anton Johansson
  */
-public abstract class AbstractSvnCommitApplicationTest extends Assert
+public abstract class AbstractSvnCommitApplicationTest extends ViewAssertUtils
 {
 	private final String[] arguments;
     private ApplicationFixture applicationFixture;
@@ -82,29 +77,5 @@ public abstract class AbstractSvnCommitApplicationTest extends Assert
 	 */
 	protected void tearDown()
 	{
-	}
-
-	/**
-	 * Gets a node by its unique identifier.
-	 *
-	 * @param identifier The identifier of the node.
-	 * @return Returns the node.
-	 */
-	protected <N extends Node> N getNode(String identifier)
-	{
-		NodeQuery query = FxAssert.assertContext().getNodeFinder().lookup("#" + identifier);
-		return query.queryFirst();
-	}
-
-	/**
-	 * Gets a set of nodes by their types.
-	 *
-	 * @param type The type of the nodes to get.
-	 * @return Returns the set of nodes.
-	 */
-	protected <N extends Node> Set<N> getNodes(Class<N> type)
-	{
-		NodeQuery query = FxAssert.assertContext().getNodeFinder().lookup(isA(type));
-		return query.queryAll();
 	}
 }

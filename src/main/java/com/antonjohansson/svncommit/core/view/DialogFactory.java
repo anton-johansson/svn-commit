@@ -175,8 +175,10 @@ public class DialogFactory
 
 		/**
 		 * Shows the created dialog.
+		 *
+		 * @return Returns the {@link Stage} instance.
 		 */
-		public void show()
+		public Stage show()
 		{
 			Stage stage = new Stage();
 			stage.initModality(APPLICATION_MODAL);
@@ -187,6 +189,7 @@ public class DialogFactory
 			stage.getIcons().add(new Image("svn.png"));
 			stage.setOnCloseRequest(handler);
 			stage.show();
+			return stage;
 		}
 	}
 }

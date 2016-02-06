@@ -110,7 +110,7 @@ public class DialogFactoryTest extends ApplicationTest
 			});
 		}
 
-		sleep(100);
+		sleep(200);
 		assertTrue(isClosed.get());
 	}
 

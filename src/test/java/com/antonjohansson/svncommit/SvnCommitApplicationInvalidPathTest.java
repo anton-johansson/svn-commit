@@ -15,50 +15,41 @@
  */
 package com.antonjohansson.svncommit;
 
-import static java.lang.System.lineSeparator;
+import static java.lang.Thread.sleep;
+import static java.util.Arrays.asList;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
+import javafx.scene.control.Label;
+
 /**
  * Integration test of {@link SvnCommitApplication} that tests running the
- * application with the {@code --version} switch.
+ * application with the 'update' argument and an invalid 'path' argument.
  *
  * @author Anton Johansson
  */
-public class SvnCommitApplicationVersionTest extends AbstractSvnCommitApplicationTest
+public class SvnCommitApplicationInvalidPathTest extends AbstractSvnCommitApplicationTest
 {
-	private volatile PrintStream oldOutput;
-	private volatile ByteArrayOutputStream output;
-
-	public SvnCommitApplicationVersionTest() throws Exception
+	public SvnCommitApplicationInvalidPathTest()
 	{
-		super("--version");
-	}
-
-	@Override
-	public void setUp()
-	{
-		output = new ByteArrayOutputStream();
-		PrintStream stream = new PrintStream(output);
-
-		oldOutput = System.out;
-		System.setOut(stream);
-	}
-
-	@Override
-	public void tearDown()
-	{
-		System.setOut(oldOutput);
+		super("--application", "update", "--path", "/some/invalid/path/that/does/not/exist");
 	}
 
 	@Test
-	public void test_print_version() throws Exception
+	public void test_update_with_invalid_path() throws Exception
 	{
-		String actual = output.toString();
-		String expected = "Development" + lineSeparator();
+		sleep(100);
+
+		Set<String> expected = new HashSet<>(asList("Error", "Cannot run program \"bash\" (in directory \"/some/invalid/path/that/does/not/exist\"): error=2, No such file or directory"));
+		Set<String> actual = new HashSet<>();
+
+		for (Label label : getNodes(Label.class))
+		{
+			actual.add(label.getText());
+		}
 
 		assertEquals(expected, actual);
 	}

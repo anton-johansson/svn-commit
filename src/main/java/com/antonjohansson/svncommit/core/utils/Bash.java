@@ -155,7 +155,7 @@ class Bash implements Shell
 		}
 		catch (IOException e)
 		{
-			throw new RuntimeException("Exception occurred when executing bash script", e);
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 

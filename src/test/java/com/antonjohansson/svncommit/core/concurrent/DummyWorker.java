@@ -13,30 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
-
-import com.antonjohansson.svncommit.application.commit.CommitModule;
-import com.antonjohansson.svncommit.application.update.UpdateModule;
-import com.antonjohansson.svncommit.core.concurrent.ConcurrentModule;
-import com.antonjohansson.svncommit.core.ioc.AbstractApplicationModule;
-import com.antonjohansson.svncommit.core.view.ViewModule;
+package com.antonjohansson.svncommit.core.concurrent;
 
 /**
- * The main application IOC module.
+ * Dummy implementation of {@link Worker} that instantly runs tasks on the same
+ * thread. Used in unit tests.
  *
  * @author Anton Johansson
  */
-class ApplicationModule extends AbstractApplicationModule
+public class DummyWorker implements Worker
 {
+	/** {@inheritDoc} */
 	@Override
-	protected void configure()
+	public void submit(Runnable task)
 	{
-		// Core
-		install(ConcurrentModule::new);
-		install(ViewModule::new);
-
-		// Application
-		install(CommitModule::new);
-		install(UpdateModule::new);
+		task.run();
 	}
 }

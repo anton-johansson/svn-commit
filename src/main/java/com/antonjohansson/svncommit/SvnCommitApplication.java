@@ -26,6 +26,7 @@ import static com.antonjohansson.svncommit.CLI.OPTIONS;
 import static com.antonjohansson.svncommit.CLI.PATH;
 import static com.antonjohansson.svncommit.CLI.VERSION;
 import static com.google.inject.name.Names.named;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 import java.io.File;
@@ -57,7 +58,7 @@ public class SvnCommitApplication extends Application
 
 	/**
 	 * Sets the exit action for forced exits.
-	 * 
+	 *
 	 * @param exit The action that will be executed upon forced exits.
 	 */
 	public static void setExit(Runnable exit)
@@ -83,14 +84,20 @@ public class SvnCommitApplication extends Application
 			Configuration configuration = getConfiguration(command);
 
 			String application = command.getOptionValue(APPLICATION);
-			String path = command.getOptionValue(PATH);
-			configure(stage, application, new File(path), configuration);
+			File path = getPath(command);
+			configure(stage, application, path, configuration);
 			return;
 		}
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("svn-commit", OPTIONS);
 		exit.run();
+	}
+
+	private File getPath(CommandLine command)
+	{
+		String pathName = command.getOptionValue(PATH, EMPTY);
+		return new File(pathName);
 	}
 
 	private Configuration getConfiguration(CommandLine command)

@@ -15,12 +15,12 @@
  */
 package com.antonjohansson.svncommit.application.commit;
 
+import com.antonjohansson.svncommit.core.concurrent.Worker;
 import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.controller.AbstractController;
 import com.antonjohansson.svncommit.core.controller.Controller;
 import com.antonjohansson.svncommit.core.domain.ModifiedItem;
 import com.antonjohansson.svncommit.core.utils.Subversion;
-import com.antonjohansson.svncommit.core.view.Alerter;
 import com.antonjohansson.svncommit.core.view.ConsoleView;
 import com.antonjohansson.svncommit.core.view.DialogFactory;
 import com.antonjohansson.svncommit.core.view.LoadingView;
@@ -52,6 +52,7 @@ class CommitController extends AbstractController<LoadingView>
 	private final Provider<ConsoleView> consoleViewProvider;
 	private final DialogFactory dialogFactory;
 	private final Subversion subversion;
+	private final Worker worker;
 	private Collection<ModifiedItem> items = emptyList();
 
 	@Inject
@@ -61,7 +62,8 @@ class CommitController extends AbstractController<LoadingView>
 			LoadingView loadingView,
 			Provider<ConsoleView> consoleViewProvider,
 			DialogFactory dialogFactory,
-			Subversion subversion)
+			Subversion subversion,
+			Worker worker)
 	{
 		super(loadingView);
 		this.configuration = configuration;
@@ -70,6 +72,7 @@ class CommitController extends AbstractController<LoadingView>
 		this.consoleViewProvider = consoleViewProvider;
 		this.dialogFactory = dialogFactory;
 		this.subversion = subversion;
+		this.worker = worker;
 	}
 
 	/** {@inheritDoc} */
@@ -119,13 +122,12 @@ class CommitController extends AbstractController<LoadingView>
 			return;
 		}
 
-		Runnable loader = () ->
+		worker.submit(() ->
 		{
 			items = getModifiedItems();
 			commitView.setItems(items);
 			loadingView.setLoading(false);
-		};
-		new Thread(loader).start();
+		});
 	}
 
 	private synchronized boolean startLoading()
@@ -143,10 +145,10 @@ class CommitController extends AbstractController<LoadingView>
 		long size = commitView.selectedItems().count();
 		if (size > 5)
 		{
-			Alerter.error("I won't open up that many compare windows!");
+			dialogFactory.error("I won't open up that many compare windows!");
 			return;
 		}
-		if (size > 1 && !Alerter.confirm("Do you want to open up %d compare windows?", size))
+		if (size > 1 && !dialogFactory.confirm("Do you want to open up %d compare windows?", size))
 		{
 			return;
 		}

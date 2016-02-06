@@ -16,6 +16,9 @@
 package com.antonjohansson.svncommit;
 
 import static com.google.common.util.concurrent.Runnables.doNothing;
+import static org.hamcrest.Matchers.isA;
+
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -39,7 +42,7 @@ public abstract class AbstractSvnCommitApplicationTest extends Assert
 {
 	private final String[] arguments;
     private ApplicationFixture applicationFixture;
-    
+
     protected AbstractSvnCommitApplicationTest(String... arguments)
 	{
 		this.arguments = arguments;
@@ -53,7 +56,7 @@ public abstract class AbstractSvnCommitApplicationTest extends Assert
 
 		Application application = new SvnCommitApplication();
 		new ApplicationServiceImpl().registerApplicationParameters(application, arguments);
-		
+
 		applicationFixture = new ApplicationAdapter(application);
 
 		FxToolkit.registerPrimaryStage();
@@ -91,5 +94,17 @@ public abstract class AbstractSvnCommitApplicationTest extends Assert
 	{
 		NodeQuery query = FxAssert.assertContext().getNodeFinder().lookup("#" + identifier);
 		return query.queryFirst();
+	}
+
+	/**
+	 * Gets a set of nodes by their types.
+	 *
+	 * @param type The type of the nodes to get.
+	 * @return Returns the set of nodes.
+	 */
+	protected <N extends Node> Set<N> getNodes(Class<N> type)
+	{
+		NodeQuery query = FxAssert.assertContext().getNodeFinder().lookup(isA(type));
+		return query.queryAll();
 	}
 }

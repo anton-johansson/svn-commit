@@ -13,30 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
+package com.antonjohansson.svncommit.core.concurrent;
 
-import com.antonjohansson.svncommit.application.commit.CommitModule;
-import com.antonjohansson.svncommit.application.update.UpdateModule;
-import com.antonjohansson.svncommit.core.concurrent.ConcurrentModule;
-import com.antonjohansson.svncommit.core.ioc.AbstractApplicationModule;
-import com.antonjohansson.svncommit.core.view.ViewModule;
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
+
+import java.util.concurrent.ExecutorService;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 
 /**
- * The main application IOC module.
+ * Contains IOC bindings for the concurrent parts of the application.
  *
  * @author Anton Johansson
  */
-class ApplicationModule extends AbstractApplicationModule
+public class ConcurrentModule extends AbstractModule
 {
+	/** {@inheritDoc} */
 	@Override
 	protected void configure()
 	{
-		// Core
-		install(ConcurrentModule::new);
-		install(ViewModule::new);
-
-		// Application
-		install(CommitModule::new);
-		install(UpdateModule::new);
+		bind(ExecutorService.class).toInstance(newSingleThreadExecutor());
+		bind(Worker.class).to(WorkerImpl.class).in(Singleton.class);
 	}
 }

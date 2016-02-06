@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.commit;
 
+import com.antonjohansson.svncommit.core.concurrent.DummyWorker;
 import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.domain.FileStatus;
 import com.antonjohansson.svncommit.core.domain.ModifiedItem;
@@ -40,7 +41,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.stubbing.Answer;
@@ -72,6 +72,7 @@ public class CommitControllerTest extends Assert
 	private EventHandler<KeyEvent> onKeyPressedHandler;
 	private CommitController controller;
 
+
 	@Before
 	@SuppressWarnings("unchecked")
 	public void setUp()
@@ -84,7 +85,7 @@ public class CommitControllerTest extends Assert
 
 		initMocks(this);
 		loadingView = new StubbedLoadingView();
-		controller = new CommitController(configuration, commitView, loadingView, () -> consoleView, dialogFactory, subversion);
+		controller = new CommitController(configuration, commitView, loadingView, () -> consoleView, dialogFactory, subversion, new DummyWorker());
 
 		when(configuration.isReplicationEnabled()).thenReturn(true);
 		when(subversion.getModifiedItems()).thenReturn(MODIFIED_ITEMS);
@@ -92,7 +93,6 @@ public class CommitControllerTest extends Assert
 
 		assertThat(loadingView.isLoading(), is(false));
 		controller.initialize();
-		assertThat(loadingView.isLoading(), is(true));
 	}
 
 	@Test
@@ -109,19 +109,13 @@ public class CommitControllerTest extends Assert
 	}
 
 	@Test
-	@Ignore
 	public void test_that_F5_triggers_a_refresh() throws Exception
 	{
 		KeyEvent event = keyEvent(F5);
 		onKeyPressedHandler.handle(event);
 		onKeyPressedHandler.handle(event);
-		onKeyPressedHandler.handle(event);
-		onKeyPressedHandler.handle(event);
 
-		sleep(250);
-
-		// We only want two calls, one for the initialize, and one for the first refresh.
-		verify(commitView, times(2)).setItems(MODIFIED_ITEMS);
+		verify(commitView, times(3)).setItems(MODIFIED_ITEMS);
 	}
 
 	private KeyEvent keyEvent(KeyCode keyCode)

@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.update;
 
+import com.antonjohansson.svncommit.core.concurrent.Worker;
 import com.antonjohansson.svncommit.core.controller.AbstractController;
 import com.antonjohansson.svncommit.core.controller.Controller;
 import com.antonjohansson.svncommit.core.utils.Subversion;
@@ -30,18 +31,20 @@ import com.google.inject.Inject;
 class UpdateController extends AbstractController<ConsoleView>
 {
 	private final Subversion subversion;
+	private final Worker worker;
 
 	@Inject
-	UpdateController(ConsoleView view, Subversion subversion)
+	UpdateController(ConsoleView view, Subversion subversion, Worker worker)
 	{
 		super(view);
 		this.subversion = subversion;
+		this.worker = worker;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void initialize()
 	{
-		subversion.update(view::append, view::showCompletionIcon);
+		worker.submit(() -> subversion.update(view::append, view::showCompletionIcon));
 	}
 }

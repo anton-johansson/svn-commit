@@ -13,30 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
-
-import com.antonjohansson.svncommit.application.commit.CommitModule;
-import com.antonjohansson.svncommit.application.update.UpdateModule;
-import com.antonjohansson.svncommit.core.concurrent.ConcurrentModule;
-import com.antonjohansson.svncommit.core.ioc.AbstractApplicationModule;
-import com.antonjohansson.svncommit.core.view.ViewModule;
+package com.antonjohansson.svncommit.core.concurrent;
 
 /**
- * The main application IOC module.
+ * Handles background jobs.
  *
  * @author Anton Johansson
  */
-class ApplicationModule extends AbstractApplicationModule
+public interface Worker
 {
-	@Override
-	protected void configure()
-	{
-		// Core
-		install(ConcurrentModule::new);
-		install(ViewModule::new);
-
-		// Application
-		install(CommitModule::new);
-		install(UpdateModule::new);
-	}
+	/**
+	 * Submits a task to the worker thread.
+	 *
+	 * @param task Task to execute.
+	 */
+	void submit(Runnable task);
 }

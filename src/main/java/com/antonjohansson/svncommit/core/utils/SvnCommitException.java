@@ -13,30 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.svncommit;
-
-import com.antonjohansson.svncommit.application.commit.CommitModule;
-import com.antonjohansson.svncommit.application.update.UpdateModule;
-import com.antonjohansson.svncommit.core.concurrent.ConcurrentModule;
-import com.antonjohansson.svncommit.core.ioc.AbstractApplicationModule;
-import com.antonjohansson.svncommit.core.view.ViewModule;
+package com.antonjohansson.svncommit.core.utils;
 
 /**
- * The main application IOC module.
+ * The exception that is thrown upon known errors, which will be displayed as a
+ * message dialog.
  *
  * @author Anton Johansson
  */
-class ApplicationModule extends AbstractApplicationModule
+public class SvnCommitException extends RuntimeException
 {
-	@Override
-	protected void configure()
-	{
-		// Core
-		install(ConcurrentModule::new);
-		install(ViewModule::new);
+	private static final long serialVersionUID = 1L;
 
-		// Application
-		install(CommitModule::new);
-		install(UpdateModule::new);
+	/**
+	 * Constructs a new {@link SvnCommitException}.
+	 *
+	 * @param message The message to display.
+	 */
+	public SvnCommitException(String message)
+	{
+		super(message);
+	}
+
+	/**
+	 * Constructs a new {@link SvnCommitException}.
+	 *
+	 * @param message The message to display.
+	 * @param cause The cause of the exception.
+	 */
+	public SvnCommitException(String message, Throwable cause)
+	{
+		super(message, cause);
 	}
 }

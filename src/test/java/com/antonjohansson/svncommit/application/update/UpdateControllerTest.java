@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.update;
 
+import com.antonjohansson.svncommit.core.concurrent.DummyWorker;
 import com.antonjohansson.svncommit.core.utils.Subversion;
 import com.antonjohansson.svncommit.core.view.ConsoleView;
 
@@ -48,7 +49,7 @@ public class UpdateControllerTest extends Assert
 	public void setUp()
 	{
 		initMocks(this);
-		controller = new UpdateController(consoleView, subversion);
+		controller = new UpdateController(consoleView, subversion, new DummyWorker());
 		setUpMocks();
 	}
 

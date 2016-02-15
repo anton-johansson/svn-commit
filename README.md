@@ -9,4 +9,4 @@ Lightweight tool for managing subversion repositories.
 
 ### Requirements
 
-Requires Java 8 or later.
+Requires Java 1.8 or later.

@@ -10,3 +10,8 @@ Lightweight tool for managing subversion repositories.
 ### Requirements
 
 Requires Java 1.8 or later.
+
+
+### License
+
+Apache License 2.0 © [Anton Johansson](http://anton-johansson.com)

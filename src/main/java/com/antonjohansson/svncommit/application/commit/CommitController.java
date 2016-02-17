@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.commit;
 
+import com.antonjohansson.svncommit.application.commit.context.CommitContextMenu;
 import com.antonjohansson.svncommit.core.concurrent.Worker;
 import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.controller.AbstractController;
@@ -53,6 +54,7 @@ class CommitController extends AbstractController<LoadingView>
 	private final DialogFactory dialogFactory;
 	private final Subversion subversion;
 	private final Worker worker;
+	private final Provider<CommitContextMenu> contextMenuProvider;
 	private Collection<ModifiedItem> items = emptyList();
 
 	@Inject
@@ -63,7 +65,8 @@ class CommitController extends AbstractController<LoadingView>
 			Provider<ConsoleView> consoleViewProvider,
 			DialogFactory dialogFactory,
 			Subversion subversion,
-			Worker worker)
+			Worker worker,
+			Provider<CommitContextMenu> contextMenuProvider)
 	{
 		super(loadingView);
 		this.configuration = configuration;
@@ -73,12 +76,14 @@ class CommitController extends AbstractController<LoadingView>
 		this.dialogFactory = dialogFactory;
 		this.subversion = subversion;
 		this.worker = worker;
+		this.contextMenuProvider = contextMenuProvider;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void initialize()
 	{
+		commitView.initialize(contextMenuProvider);
 		initializeHandlers();
 
 		loadingView.setContent(commitView);

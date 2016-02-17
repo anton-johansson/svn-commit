@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.commit;
 
+import com.antonjohansson.svncommit.application.commit.context.CommitContextModule;
 import com.antonjohansson.svncommit.core.ioc.AbstractApplicationModule;
 
 /**
@@ -27,6 +28,8 @@ public class CommitModule extends AbstractApplicationModule
 	@Override
 	protected void configure()
 	{
+		install(CommitContextModule::new);
+
 		controller("commit", CommitController.class);
 		view(CommitView.class);
 	}

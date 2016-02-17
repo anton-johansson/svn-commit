@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.commit;
 
+import com.antonjohansson.svncommit.application.commit.context.CommitContextMenu;
 import com.antonjohansson.svncommit.core.concurrent.DummyWorker;
 import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.domain.FileStatus;
@@ -68,10 +69,10 @@ public class CommitControllerTest extends Assert
 	@Mock private ConsoleView consoleView;
 	@Mock private DialogFactory dialogFactory;
 	@Mock private Subversion subversion;
+	@Mock private CommitContextMenu commitContextMenu;
 	private StubbedLoadingView loadingView;
 	private EventHandler<KeyEvent> onKeyPressedHandler;
 	private CommitController controller;
-
 
 	@Before
 	@SuppressWarnings("unchecked")
@@ -85,7 +86,7 @@ public class CommitControllerTest extends Assert
 
 		initMocks(this);
 		loadingView = new StubbedLoadingView();
-		controller = new CommitController(configuration, commitView, loadingView, () -> consoleView, dialogFactory, subversion, new DummyWorker());
+		controller = new CommitController(configuration, commitView, loadingView, () -> consoleView, dialogFactory, subversion, new DummyWorker(), () -> commitContextMenu);
 
 		when(configuration.isReplicationEnabled()).thenReturn(true);
 		when(subversion.getModifiedItems()).thenReturn(MODIFIED_ITEMS);
@@ -100,6 +101,7 @@ public class CommitControllerTest extends Assert
 	{
 		sleep(100);
 		assertThat(loadingView.isLoading(), is(false));
+		verify(commitView).initialize(any());
 		verify(commitView).setCommitHandler(any());
 		verify(commitView).setOnKeyPressed(any());
 		verify(commitView).setOnMouseDoubleClicked(any());

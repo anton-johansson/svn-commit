@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit.application.commit;
 
+import com.antonjohansson.svncommit.application.commit.context.CommitContextMenu;
 import com.antonjohansson.svncommit.core.domain.DbUpdateLocation;
 import com.antonjohansson.svncommit.core.domain.FileStatus;
 import com.antonjohansson.svncommit.core.domain.ModifiedItem;
@@ -27,18 +28,18 @@ import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.SelectionMode.MULTIPLE;
 import static javafx.scene.paint.Color.LIGHTGRAY;
 
-import java.net.URL;
 import java.util.Collection;
-import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import com.google.inject.Provider;
 
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -52,7 +53,7 @@ import javafx.util.StringConverter;
  *
  * @author Anton Johansson
  */
-public class CommitView extends AbstractView implements Initializable
+public class CommitView extends AbstractView
 {
 	private static final double DO_COMMIT_WIDTH = 40;
 	private static final double STATUS_WIDTH = 100;
@@ -72,13 +73,6 @@ public class CommitView extends AbstractView implements Initializable
 	public CommitView()
 	{
 		items = observableArrayList();
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void initialize(URL location, ResourceBundle resource)
-	{
-		initializeTableView();
 	}
 
 	/**
@@ -166,6 +160,15 @@ public class CommitView extends AbstractView implements Initializable
 		});
 	}
 
+	/**
+	 * Initializes the view.
+	 */
+	public void initialize(Provider<CommitContextMenu> contextMenuProvider)
+	{
+		initializeTableView();
+		initializeTableViewContextMenu(contextMenuProvider);
+	}
+
 	private void initializeTableView()
 	{
 		tableView.getSelectionModel().setSelectionMode(MULTIPLE);
@@ -206,6 +209,30 @@ public class CommitView extends AbstractView implements Initializable
 		replicationColumn.setCellFactory(p -> new ReplicationCell());
 		replicationColumn.setPrefWidth(REPLICATION_WIDTH);
 		tableView.getColumns().add(replicationColumn);
+	}
+
+	private void initializeTableViewContextMenu(Provider<CommitContextMenu> provider)
+	{
+		tableView.setRowFactory(tableView ->
+		{
+			CommitContextMenu contextMenu = provider.get();
+			TableRow<ModifiedItem> row = new TableRow<>();
+			row.setContextMenu(contextMenu.getContextMenu());
+			row.itemProperty().addListener(e ->
+			{
+				setMenuItemStatuses(row, contextMenu);
+			});
+			return row;
+		});
+	}
+
+	private void setMenuItemStatuses(TableRow<ModifiedItem> row, CommitContextMenu contextMenu)
+	{
+		ModifiedItem item = row.getItem();
+		contextMenu.getMenuItems()
+				.stream()
+				.filter(menuItem -> item != null)
+				.forEach(menuItem -> menuItem.enable(item));
 	}
 
 	/**

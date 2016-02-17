@@ -38,8 +38,5 @@ class ApplicationModule extends AbstractApplicationModule
 		// Application
 		install(CommitModule::new);
 		install(UpdateModule::new);
-
-		String[] t = new String[] { "hej", "asdasdassdas", "asdasdassdas", "asdasdassdas", "asdasdassdas",
-				"asdasdassdas", "asdasdassdas", "asdasdassdas", "asdasdassdas" };
 	}
 }

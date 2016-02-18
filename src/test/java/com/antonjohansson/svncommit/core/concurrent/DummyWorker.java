@@ -29,4 +29,10 @@ public class DummyWorker implements Worker
 	{
 		task.run();
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void shutdown()
+	{
+	}
 }

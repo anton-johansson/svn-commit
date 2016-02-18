@@ -15,6 +15,7 @@
  */
 package com.antonjohansson.svncommit;
 
+import com.antonjohansson.svncommit.core.concurrent.Worker;
 import com.antonjohansson.svncommit.core.config.Configuration;
 import com.antonjohansson.svncommit.core.controller.Controller;
 import com.antonjohansson.svncommit.core.utils.ForcedExit;
@@ -110,6 +111,7 @@ public class SvnCommitApplication extends Application
 		};
 
 		Injector injector = Guice.createInjector(applicationModule, utilityModule, configurationModule);
+		Worker worker = injector.getInstance(Worker.class);
 		Controller controller = injector.getInstance(Key.get(Controller.class, named(application)));
 		controller.initialize();
 		View view = controller.getView();
@@ -119,6 +121,7 @@ public class SvnCommitApplication extends Application
 		stage.setWidth(1200);
 		stage.setHeight(400);
 		stage.getIcons().add(new Image("svn.png"));
+		stage.setOnCloseRequest(e -> worker.shutdown());
 		stage.show();
 	}
 

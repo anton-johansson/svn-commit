@@ -70,4 +70,11 @@ class WorkerImpl implements Worker
 		});
 		service.submit(actualTask);
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void shutdown()
+	{
+		service.shutdown();
+	}
 }

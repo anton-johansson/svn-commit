@@ -28,4 +28,9 @@ public interface Worker
 	 * @param task Task to execute.
 	 */
 	void submit(Runnable task);
+
+	/**
+	 * Shuts the worker down.
+	 */
+	void shutdown();
 }

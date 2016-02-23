@@ -39,14 +39,16 @@ public abstract class AbstractRowContextMenuItem<T> extends MenuItem
 	}
 
 	/**
-	 * Enables or disables this menu item depending on the predicate and the given item.
+	 * Sets the actual item for this menu item.
 	 *
-	 * @param item The item of the row.
+	 * @param item The item.
+	 * @param refreshCommand The command used to refresh the commit view.
 	 */
-	public void enable(T item)
+	public final void configure(T item, Runnable refreshCommand)
 	{
 		boolean enabled = predicate().apply(item);
 		setDisable(!enabled);
+		setOnAction(e -> action(item, refreshCommand));
 	}
 
 	/**
@@ -56,4 +58,12 @@ public abstract class AbstractRowContextMenuItem<T> extends MenuItem
 	 * @return Returns the predicate.
 	 */
 	protected abstract Predicate<T> predicate();
+
+	/**
+	 * Performs the action when clicking on the item.
+	 *
+	 * @param item The item that is clicked.
+	 * @param refreshCommand The command that is used to refresh the commit view.
+	 */
+	protected abstract void action(T item, Runnable refreshCommand);
 }

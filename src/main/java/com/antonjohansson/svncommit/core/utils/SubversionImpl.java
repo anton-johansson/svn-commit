@@ -89,4 +89,11 @@ class SubversionImpl implements Subversion
 
 		shell.executeAndPipeOutput(onData, onData, onComplete, command.toString());
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void add(String fileName)
+	{
+		shell.execute("svn add '" + fileName + "'");
+	}
 }

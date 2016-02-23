@@ -101,7 +101,7 @@ public class CommitControllerTest extends Assert
 	{
 		sleep(100);
 		assertThat(loadingView.isLoading(), is(false));
-		verify(commitView).initialize(any());
+		verify(commitView).initialize(any(), any());
 		verify(commitView).setCommitHandler(any());
 		verify(commitView).setOnKeyPressed(any());
 		verify(commitView).setOnMouseDoubleClicked(any());

@@ -32,6 +32,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.google.inject.Inject;
@@ -83,7 +84,7 @@ class CommitController extends AbstractController<LoadingView>
 	@Override
 	public void initialize()
 	{
-		commitView.initialize(contextMenuProvider);
+		commitView.initialize(contextMenuProvider, this::refresh);
 		initializeHandlers();
 
 		loadingView.setContent(commitView);
@@ -162,7 +163,10 @@ class CommitController extends AbstractController<LoadingView>
 
 	private void changeDoCommit()
 	{
-		boolean allMarked = commitView.selectedItems().allMatch(i -> i.isDoCommit());
+		boolean allMarked = commitView.selectedItems()
+				.filter(Objects::nonNull)
+				.allMatch(i -> i.isDoCommit());
+
 		boolean doCommit = !allMarked;
 		commitView.selectedItems()
 				.filter(s -> s.getStatus().isCommitable())

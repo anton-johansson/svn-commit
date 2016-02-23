@@ -163,10 +163,10 @@ public class CommitView extends AbstractView
 	/**
 	 * Initializes the view.
 	 */
-	public void initialize(Provider<CommitContextMenu> contextMenuProvider)
+	public void initialize(Provider<CommitContextMenu> contextMenuProvider, Runnable refreshCommand)
 	{
 		initializeTableView();
-		initializeTableViewContextMenu(contextMenuProvider);
+		initializeTableViewContextMenu(contextMenuProvider, refreshCommand);
 	}
 
 	private void initializeTableView()
@@ -211,28 +211,25 @@ public class CommitView extends AbstractView
 		tableView.getColumns().add(replicationColumn);
 	}
 
-	private void initializeTableViewContextMenu(Provider<CommitContextMenu> provider)
+	private void initializeTableViewContextMenu(Provider<CommitContextMenu> provider, Runnable refreshCommand)
 	{
 		tableView.setRowFactory(tableView ->
 		{
 			CommitContextMenu contextMenu = provider.get();
 			TableRow<ModifiedItem> row = new TableRow<>();
 			row.setContextMenu(contextMenu.getContextMenu());
-			row.itemProperty().addListener(e ->
-			{
-				setMenuItemStatuses(row, contextMenu);
-			});
+			row.itemProperty().addListener(e -> configureMenuItem(row, contextMenu, refreshCommand));
 			return row;
 		});
 	}
 
-	private void setMenuItemStatuses(TableRow<ModifiedItem> row, CommitContextMenu contextMenu)
+	private void configureMenuItem(TableRow<ModifiedItem> row, CommitContextMenu contextMenu, Runnable refreshCommand)
 	{
 		ModifiedItem item = row.getItem();
 		contextMenu.getMenuItems()
 				.stream()
 				.filter(menuItem -> item != null)
-				.forEach(menuItem -> menuItem.enable(item));
+				.forEach(menuItem -> menuItem.configure(item, refreshCommand));
 	}
 
 	/**

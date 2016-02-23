@@ -16,11 +16,13 @@
 package com.antonjohansson.svncommit.application.commit.context;
 
 import com.antonjohansson.svncommit.core.domain.ModifiedItem;
+import com.antonjohansson.svncommit.core.utils.Subversion;
 import com.antonjohansson.svncommit.core.view.AbstractRowContextMenuItem;
 
 import static com.antonjohansson.svncommit.core.domain.FileStatus.UNVERSIONED;
 
 import com.google.common.base.Predicate;
+import com.google.inject.Inject;
 
 /**
  * Context menu item for running an {@code svn add} command.
@@ -29,18 +31,28 @@ import com.google.common.base.Predicate;
  */
 class AddMenuItem extends AbstractRowContextMenuItem<ModifiedItem>
 {
-	/**
-	 * Constructs a new {@link AddMenuItem}.
-	 */
-	AddMenuItem()
+	private final Subversion subversion;
+
+	@Inject
+	AddMenuItem(Subversion subversion)
 	{
 		super("SVN Add");
+		this.subversion = subversion;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public Predicate<ModifiedItem> predicate()
+	protected Predicate<ModifiedItem> predicate()
 	{
 		return modiifedItem -> UNVERSIONED.equals(modiifedItem.getStatus());
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	protected void action(ModifiedItem item, Runnable refreshCommand)
+	{
+		subversion.add(item.getFileName());
+		item.setDoCommit(true);
+		refreshCommand.run();
 	}
 }

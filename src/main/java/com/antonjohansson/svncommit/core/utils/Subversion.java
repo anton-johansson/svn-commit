@@ -58,4 +58,11 @@ public interface Subversion
 	 * @param onComplete The task to run when the update is complete.
 	 */
 	void commit(String message, Collection<String> filePaths, Consumer<String> onData, Consumer<Boolean> onComplete);
+
+	/**
+	 * Adds the given file.
+	 *
+	 * @param fileName The file name of the file to add.
+	 */
+	void add(String fileName);
 }

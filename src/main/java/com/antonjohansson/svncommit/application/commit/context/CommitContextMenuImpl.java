@@ -41,7 +41,7 @@ class CommitContextMenuImpl extends ContextMenu implements CommitContextMenu
 	@Inject
 	CommitContextMenuImpl(Set<AbstractRowContextMenuItem<ModifiedItem>> menuItems)
 	{
-		super(menuItems.stream().toArray(size -> new MenuItem[size]));
+		super(menuItems.stream().toArray(MenuItem[]::new));
 		this.menuItems = menuItems;
 	}
 

@@ -38,6 +38,7 @@ public class CommitContextModule extends AbstractModule
 		bind(CommitContextMenu.class).to(CommitContextMenuImpl.class);
 
 		multibinder().addBinding().to(AddMenuItem.class);
+		multibinder().addBinding().to(DeleteMenuItem.class);
 	}
 
 	private Multibinder<AbstractRowContextMenuItem<ModifiedItem>> multibinder()

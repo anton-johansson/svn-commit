@@ -96,4 +96,11 @@ class SubversionImpl implements Subversion
 	{
 		shell.execute("svn add '" + fileName + "'");
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void delete(String fileName)
+	{
+		shell.execute("svn delete '" + fileName + "'");
+	}
 }

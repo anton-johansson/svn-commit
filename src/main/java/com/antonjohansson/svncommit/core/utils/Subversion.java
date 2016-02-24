@@ -65,4 +65,11 @@ public interface Subversion
 	 * @param fileName The file name of the file to add.
 	 */
 	void add(String fileName);
+
+	/**
+	 * Deletes the given file.
+	 *
+	 * @param fileName The file name of the file to delete.
+	 */
+	void delete(String fileName);
 }
